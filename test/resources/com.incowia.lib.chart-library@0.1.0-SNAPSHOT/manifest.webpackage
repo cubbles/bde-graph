@@ -1,0 +1,1082 @@
+{
+  "name": "chart-library",
+  "groupId": "com.incowia.lib",
+  "version": "0.1.0-SNAPSHOT",
+  "modelVersion": "8.3.0",
+  "docType": "webpackage",
+  "author": {
+    "name": "Philipp Wagner",
+    "email": "philipp.wagner@incowia.com"
+  },
+  "contributors": [
+    {
+      "name": "Edwin Gamboa",
+      "email": "edwin.gamboa@incowia.com"
+    }
+  ],
+  "license": "MIT",
+  "keywords": [],
+  "man": [],
+  "artifacts": {
+    "elementaryComponents": [
+      {
+        "artifactId": "base-chart",
+        "description": "Customizable base chart component",
+        "runnables": [
+          {
+            "name": "demo",
+            "path": "/demo/index.html",
+            "description": "base-chart demo"
+          }
+        ],
+        "endpoints": [
+          {
+            "endpointId": "html-import",
+            "description": "This is recommended for you use with webcomponents.",
+            "resources": [
+              "base-chart.html"
+            ],
+            "dependencies": [
+              "cubx.core.rte@1.8.0/cubxpolymer/main",
+              "c3-0.4.11-rc4@1.0.0/c3/main",
+              "lodash-3.10.1@1.0.1/lodash/html-import",
+              "q-1.4.1@1.0.0/q/html-import"
+            ]
+          }
+        ],
+        "slots": [
+          {
+            "slotId": "dataColumns",
+            "type": "object",
+            "direction": [
+              "input"
+            ]
+          },
+          {
+            "slotId": "xLabels",
+            "type": "object",
+            "direction": [
+              "input"
+            ]
+          },
+          {
+            "slotId": "type",
+            "type": "string",
+            "direction": [
+              "input"
+            ]
+          }
+        ]
+      },
+      {
+        "artifactId": "code-viewer",
+        "description": "Code viewer using code-prettify library from Google",
+        "runnables": [
+          {
+            "name": "demo",
+            "path": "/demo/index.html",
+            "description": "Demo app..."
+          }
+        ],
+        "endpoints": [
+          {
+            "endpointId": "main",
+            "description": "This is recommended for you use with webcomponents.",
+            "resources": [
+              "code-viewer.html",
+              "lib/prettify.js",
+              "lib/prettify.css"
+            ],
+            "dependencies": [
+              "cubx.core.rte@1.8.0/cubxpolymer/main"
+            ]
+          }
+        ],
+        "slots": [
+          {
+            "slotId": "id",
+            "type": "string",
+            "direction": [
+              "input"
+            ],
+            "value": "codeViewerId"
+          },
+          {
+            "slotId": "code",
+            "type": "string",
+            "direction": [
+              "input"
+            ]
+          }
+        ]
+      },
+      {
+        "artifactId": "html-renderer",
+        "description": "Component to render html pages",
+        "runnables": [
+          {
+            "name": "demo",
+            "path": "/demo/index.html",
+            "description": "Demo app..."
+          }
+        ],
+        "endpoints": [
+          {
+            "endpointId": "main",
+            "description": "This is recommended for you use with webcomponents.",
+            "resources": [
+              "html-renderer.html"
+            ],
+            "dependencies": [
+              "cubx.core.rte@1.8.0/cubxpolymer/main"
+            ]
+          }
+        ],
+        "slots": [
+          {
+            "slotId": "id",
+            "type": "string",
+            "direction": [
+              "input"
+            ]
+          },
+          {
+            "slotId": "src",
+            "type": "string",
+            "direction": [
+              "input"
+            ]
+          }
+        ]
+      }
+    ],
+    "compoundComponents": [
+      {
+        "artifactId": "bar-chart",
+        "description": "Bar chart component",
+        "runnables": [
+          {
+            "name": "demo",
+            "path": "/demo/index.html",
+            "description": "Bar chart demo"
+          },
+          {
+            "name": "docs",
+            "path": "/docs/index.html",
+            "description": "Dataflow diagram of this component"
+          }
+        ],
+        "endpoints": [
+          {
+            "endpointId": "main",
+            "resources": [],
+            "dependencies": [
+              "this/base-chart/html-import"
+            ]
+          }
+        ],
+        "slots": [
+          {
+            "slotId": "dataColumns",
+            "type": "object",
+            "direction": [
+              "input"
+            ]
+          },
+          {
+            "slotId": "xLabels",
+            "type": "object",
+            "direction": [
+              "input"
+            ]
+          },
+          {
+           "slotId": "testInputOutput",
+           "type": "string",
+           "direction": ["input","output"]
+          },
+          {
+            "slotId": "testOutput",
+            "type": "number",
+            "direction": ["output"]
+          },
+          {
+            "slotId": "test",
+            "type": "object"
+          }
+        ],
+        "members": [
+          {
+            "memberId": "chart1",
+            "componentId": "this/base-chart"
+          }
+        ],
+        "connections": [
+          {
+            "connectionId": "con1",
+            "source": {
+              "slot": "dataColumns"
+            },
+            "destination": {
+              "memberIdRef": "chart1",
+              "slot": "dataColumns"
+            }
+          },
+          {
+            "connectionId": "con2",
+            "source": {
+              "slot": "xLabels"
+            },
+            "destination": {
+              "memberIdRef": "chart1",
+              "slot": "xLabels"
+            }
+          }
+        ],
+        "inits": [
+          {
+            "slot": "type",
+            "value": "bar",
+            "memberIdRef": "chart1"
+          }
+        ]
+      },
+      {
+        "artifactId": "line-chart",
+        "description": "Line chart component",
+        "runnables": [
+          {
+            "name": "demo",
+            "path": "/demo/index.html",
+            "description": "Line chart demo"
+          }
+        ],
+        "endpoints": [
+          {
+            "endpointId": "main",
+            "resources": [],
+            "dependencies": [
+              "this/base-chart/html-import"
+            ]
+          }
+        ],
+        "slots": [
+          {
+            "slotId": "dataColumns",
+            "type": "object",
+            "direction": [
+              "input"
+            ]
+          },
+          {
+            "slotId": "xLabels",
+            "type": "object",
+            "direction": [
+              "input"
+            ]
+          }
+        ],
+        "members": [
+          {
+            "memberId": "chart1",
+            "componentId": "this/base-chart"
+          }
+        ],
+        "connections": [
+          {
+            "connectionId": "con1",
+            "source": {
+              "slot": "dataColumns"
+            },
+            "destination": {
+              "memberIdRef": "chart1",
+              "slot": "dataColumns"
+            }
+          },
+          {
+            "connectionId": "con2",
+            "source": {
+              "slot": "xLabels"
+            },
+            "destination": {
+              "memberIdRef": "chart1",
+              "slot": "xLabels"
+            }
+          }
+        ],
+        "inits": [
+          {
+            "slot": "type",
+            "value": "line",
+            "memberIdRef": "chart1"
+          }
+        ]
+      },
+      {
+        "artifactId": "spline-chart",
+        "description": "Spline chart component",
+        "runnables": [
+          {
+            "name": "demo",
+            "path": "/demo/index.html",
+            "description": "Spline chart demo"
+          }
+        ],
+        "endpoints": [
+          {
+            "endpointId": "main",
+            "resources": [],
+            "dependencies": [
+              "this/base-chart/html-import"
+            ]
+          }
+        ],
+        "slots": [
+          {
+            "slotId": "dataColumns",
+            "type": "object",
+            "direction": [
+              "input"
+            ]
+          },
+          {
+            "slotId": "xLabels",
+            "type": "object",
+            "direction": [
+              "input"
+            ]
+          }
+        ],
+        "members": [
+          {
+            "memberId": "chart1",
+            "componentId": "this/base-chart"
+          }
+        ],
+        "connections": [
+          {
+            "connectionId": "con1",
+            "source": {
+              "slot": "dataColumns"
+            },
+            "destination": {
+              "memberIdRef": "chart1",
+              "slot": "dataColumns"
+            }
+          },
+          {
+            "connectionId": "con2",
+            "source": {
+              "slot": "xLabels"
+            },
+            "destination": {
+              "memberIdRef": "chart1",
+              "slot": "xLabels"
+            }
+          }
+        ],
+        "inits": [
+          {
+            "slot": "type",
+            "value": "spline",
+            "memberIdRef": "chart1"
+          }
+        ]
+      },
+      {
+        "artifactId": "pie-chart",
+        "description": "Pie chart component",
+        "runnables": [
+          {
+            "name": "demo",
+            "path": "/demo/index.html",
+            "description": "Pie chart demo"
+          }
+        ],
+        "endpoints": [
+          {
+            "endpointId": "main",
+            "resources": [],
+            "dependencies": [
+              "this/base-chart/html-import"
+            ]
+          }
+        ],
+        "slots": [
+          {
+            "slotId": "dataColumns",
+            "type": "object",
+            "direction": [
+              "input"
+            ]
+          }
+        ],
+        "members": [
+          {
+            "memberId": "chart1",
+            "componentId": "this/base-chart"
+          }
+        ],
+        "connections": [
+          {
+            "connectionId": "con1",
+            "source": {
+              "slot": "dataColumns"
+            },
+            "destination": {
+              "memberIdRef": "chart1",
+              "slot": "dataColumns"
+            }
+          }
+        ],
+        "inits": [
+          {
+            "slot": "type",
+            "value": "pie",
+            "memberIdRef": "chart1"
+          }
+        ]
+      },
+      {
+        "artifactId": "step-chart",
+        "description": "Step chart component",
+        "runnables": [
+          {
+            "name": "demo",
+            "path": "/demo/index.html",
+            "description": "Step chart demo"
+          }
+        ],
+        "endpoints": [
+          {
+            "endpointId": "main",
+            "resources": [],
+            "dependencies": [
+              "this/base-chart/html-import"
+            ]
+          }
+        ],
+        "slots": [
+          {
+            "slotId": "dataColumns",
+            "type": "object",
+            "direction": [
+              "input"
+            ]
+          },
+          {
+            "slotId": "xLabels",
+            "type": "object",
+            "direction": [
+              "input"
+            ]
+          }
+        ],
+        "members": [
+          {
+            "memberId": "chart1",
+            "componentId": "this/base-chart"
+          }
+        ],
+        "connections": [
+          {
+            "connectionId": "con1",
+            "source": {
+              "slot": "dataColumns"
+            },
+            "destination": {
+              "memberIdRef": "chart1",
+              "slot": "dataColumns"
+            }
+          },
+          {
+            "connectionId": "con2",
+            "source": {
+              "slot": "xLabels"
+            },
+            "destination": {
+              "memberIdRef": "chart1",
+              "slot": "xLabels"
+            }
+          }
+        ],
+        "inits": [
+          {
+            "slot": "type",
+            "value": "step",
+            "memberIdRef": "chart1"
+          }
+        ]
+      },
+      {
+        "artifactId": "demo-base-chart",
+        "description": "base-chart demo using cubx basic-html-components",
+        "runnables": [
+          {
+            "name": "demo",
+            "path": "/demo/index.html",
+            "description": "Demo app..."
+          }
+        ],
+        "endpoints": [
+          {
+            "endpointId": "main",
+            "resources": [
+              "css/demo-base-chart.css",
+              "connectionHook.js"
+            ],
+            "dependencies": [
+              "com.incowia.basic-html-components@0.1.0-SNAPSHOT/cubx-select/main",
+              "com.incowia.basic-html-components@0.1.0-SNAPSHOT/cubx-textarea/main",
+              "com.incowia.basic-html-components@0.1.0-SNAPSHOT/cubx-p/main",
+              "this/base-chart/html-import"
+            ]
+          }
+        ],
+        "slots": [],
+        "members": [
+          {
+            "memberId": "pNote",
+            "componentId": "com.incowia.basic-html-components@0.1.0-SNAPSHOT/cubx-p"
+          },
+          {
+            "memberId": "typeSelect",
+            "componentId": "com.incowia.basic-html-components@0.1.0-SNAPSHOT/cubx-select"
+          },
+          {
+            "memberId": "dataColumnsText",
+            "componentId": "com.incowia.basic-html-components@0.1.0-SNAPSHOT/cubx-textarea"
+          },
+          {
+            "memberId": "xLabelsText",
+            "componentId": "com.incowia.basic-html-components@0.1.0-SNAPSHOT/cubx-textarea"
+          },
+          {
+            "memberId": "chart1",
+            "componentId": "this/base-chart"
+          }
+        ],
+        "connections": [
+          {
+            "connectionId": "selectValue",
+            "source": {
+              "memberIdRef": "typeSelect",
+              "slot": "value"
+            },
+            "destination": {
+              "memberIdRef": "chart1",
+              "slot": "type"
+            }
+          },
+          {
+            "connectionId": "dataColumnsValue",
+            "source": {
+              "memberIdRef": "dataColumnsText",
+              "slot": "value"
+            },
+            "destination": {
+              "memberIdRef": "chart1",
+              "slot": "dataColumns"
+            },
+            "hookFunction": "demoBaseChartConnectionHookStringToArray"
+          },
+          {
+            "connectionId": "xLabelsValue",
+            "source": {
+              "memberIdRef": "xLabelsText",
+              "slot": "value"
+            },
+            "destination": {
+              "memberIdRef": "chart1",
+              "slot": "xLabels"
+            },
+            "hookFunction": "demoBaseChartConnectionHookStringToArray"
+          }
+        ],
+        "inits": [
+          {
+            "slot": "text",
+            "value": "Hint: Use JSON for input slots of type object/array!. Changes are propagated to the Chart when the Text areas loose the focus (e.g. when you click outside the text area)",
+            "memberIdRef": "pNote"
+          },
+          {
+            "slot": "id",
+            "value": "chartType",
+            "memberIdRef": "typeSelect"
+          },
+          {
+            "slot": "options",
+            "value": [
+              [
+                "",
+                ""
+              ],
+              [
+                "line",
+                "line"
+              ],
+              [
+                "bar",
+                "bar"
+              ],
+              [
+                "scatter",
+                "scatter"
+              ],
+              [
+                "step",
+                "step"
+              ],
+              [
+                "spline",
+                "spline"
+              ],
+              [
+                "area-spline",
+                "area-spline"
+              ],
+              [
+                "pie",
+                "pie"
+              ]
+            ],
+            "memberIdRef": "typeSelect"
+          },
+          {
+            "slot": "label",
+            "value": "type (string): ",
+            "memberIdRef": "typeSelect"
+          },
+          {
+            "slot": "id",
+            "value": "chartColumns",
+            "memberIdRef": "dataColumnsText"
+          },
+          {
+            "slot": "value",
+            "value": "[\"Label 1\", \"Label 2\", \"Label 3\", \"Label 4\", \"Label 5\", \"Label 6\", \"Label 7\"]",
+            "memberIdRef": "xLabelsText"
+          },
+          {
+            "slot": "label",
+            "value": "xLabels (Array): ",
+            "memberIdRef": "xLabelsText"
+          },
+          {
+            "slot": "value",
+            "value": "[[\"dataSet1\", 10, 20, 50, 100, 40, 20, 70],[\"dataSet2\", 100, 40, 10, 75, 50, 50, 90],[\"dataSet3\", 15, 30, 50, 40, 15, 120, 80]]",
+            "memberIdRef": "dataColumnsText"
+          },
+          {
+            "slot": "label",
+            "value": "dataColumns (Array): ",
+            "memberIdRef": "dataColumnsText"
+          },
+          {
+            "slot": "rows",
+            "value": 5,
+            "memberIdRef": "dataColumnsText"
+          },
+          {
+            "slot": "cols",
+            "value": 50,
+            "memberIdRef": "dataColumnsText"
+          },
+          {
+            "slot": "id",
+            "value": "chartXLabels",
+            "memberIdRef": "xLabelsText"
+          },
+          {
+            "slot": "rows",
+            "value": 5,
+            "memberIdRef": "xLabelsText"
+          },
+          {
+            "slot": "cols",
+            "value": 50,
+            "memberIdRef": "xLabelsText"
+          }
+        ]
+      },
+      {
+        "artifactId": "demo-line-chart",
+        "description": "line-cahrt demo using cubx-html-basic components",
+        "runnables": [
+          {
+            "name": "demo",
+            "path": "/demo/index.html",
+            "description": "Demo app..."
+          }
+        ],
+        "endpoints": [
+          {
+            "endpointId": "main",
+            "resources": [
+              "css/demo-line-chart.css",
+              "connectionHook.js"
+            ],
+            "dependencies": [
+              "com.incowia.basic-html-components@0.1.0-SNAPSHOT/cubx-textarea/main",
+              "com.incowia.basic-html-components@0.1.0-SNAPSHOT/cubx-p/main",
+              "this/line-chart/main"
+            ]
+          }
+        ],
+        "slots": [],
+        "members": [
+          {
+            "memberId": "pNote",
+            "componentId": "com.incowia.basic-html-components@0.1.0-SNAPSHOT/cubx-p"
+          },
+          {
+            "memberId": "dataColumnsText",
+            "componentId": "com.incowia.basic-html-components@0.1.0-SNAPSHOT/cubx-textarea"
+          },
+          {
+            "memberId": "xLabelsText",
+            "componentId": "com.incowia.basic-html-components@0.1.0-SNAPSHOT/cubx-textarea"
+          },
+          {
+            "memberId": "chart1",
+            "componentId": "this/base-chart"
+          }
+        ],
+        "connections": [
+          {
+            "connectionId": "dataColumnsValue",
+            "source": {
+              "memberIdRef": "dataColumnsText",
+              "slot": "value"
+            },
+            "destination": {
+              "memberIdRef": "chart1",
+              "slot": "dataColumns"
+            },
+            "hookFunction": "demoBaseChartConnectionHookStringToArray"
+          },
+          {
+            "connectionId": "xLabelsValue",
+            "source": {
+              "memberIdRef": "xLabelsText",
+              "slot": "value"
+            },
+            "destination": {
+              "memberIdRef": "chart1",
+              "slot": "xLabels"
+            },
+            "hookFunction": "demoBaseChartConnectionHookStringToArray"
+          }
+        ],
+        "inits": [
+          {
+            "slot": "text",
+            "value": "Hint: Use JSON for input slots of type object/array!. Changes are propagated to the Chart when the Text areas loose the focus (e.g. when you click outside the text area)",
+            "memberIdRef": "pNote"
+          },
+          {
+            "slot": "id",
+            "value": "chartColumns",
+            "memberIdRef": "dataColumnsText"
+          },
+          {
+            "slot": "value",
+            "value": "[[\"dataSet1\", 10, 20, 50, 100, 40, 20, 70],[\"dataSet2\", 100, 40, 10, 75, 50, 50, 90],[\"dataSet3\", 15, 30, 50, 40, 15, 120, 80]]",
+            "memberIdRef": "dataColumnsText"
+          },
+          {
+            "slot": "label",
+            "value": "dataColumns (Array): ",
+            "memberIdRef": "dataColumnsText"
+          },
+          {
+            "slot": "rows",
+            "value": 5,
+            "memberIdRef": "dataColumnsText"
+          },
+          {
+            "slot": "cols",
+            "value": 50,
+            "memberIdRef": "dataColumnsText"
+          },
+          {
+            "slot": "id",
+            "value": "chartXLabels",
+            "memberIdRef": "xLabelsText"
+          },
+          {
+            "slot": "rows",
+            "value": 5,
+            "memberIdRef": "xLabelsText"
+          },
+          {
+            "slot": "cols",
+            "value": 50,
+            "memberIdRef": "xLabelsText"
+          },
+          {
+            "slot": "value",
+            "value": "[\"Label 1\", \"Label 2\", \"Label 3\", \"Label 4\", \"Label 5\", \"Label 6\", \"Label 7\"]",
+            "memberIdRef": "xLabelsText"
+          },
+          {
+            "slot": "label",
+            "value": "xLabels (Array): ",
+            "memberIdRef": "xLabelsText"
+          }
+        ]
+      },
+      {
+        "artifactId": "demo-traditional-vs-component",
+        "description": "Demo to show the programming of an app without and with components.  ",
+        "runnables": [
+          {
+            "name": "demo",
+            "path": "/demo/index.html",
+            "description": "Demo app..."
+          }
+        ],
+        "endpoints": [
+          {
+            "endpointId": "main",
+            "resources": [
+              "css/demo-traditional-vs-component.css",
+              "demoScripts.js"
+            ],
+            "dependencies": [
+              "this/base-chart/html-import",
+              "this/code-viewer/main",
+              "this/html-renderer/main",
+              "com.incowia.basic-html-components@0.1.0-SNAPSHOT/cubx-p/main",
+              "com.incowia.basic-html-components@0.1.0-SNAPSHOT/cubx-button/main"
+            ]
+          }
+        ],
+        "slots": [],
+        "members": [
+          {
+            "memberId": "htmlNote",
+            "componentId": "com.incowia.basic-html-components@0.1.0-SNAPSHOT/cubx-p"
+          },
+          {
+            "memberId": "setHtmlButton",
+            "componentId": "com.incowia.basic-html-components@0.1.0-SNAPSHOT/cubx-button"
+          },
+          {
+            "memberId": "htmlCode",
+            "componentId": "this/code-viewer"
+          },
+          {
+            "memberId": "jsNote",
+            "componentId": "com.incowia.basic-html-components@0.1.0-SNAPSHOT/cubx-p"
+          },
+          {
+            "memberId": "setJsButton",
+            "componentId": "com.incowia.basic-html-components@0.1.0-SNAPSHOT/cubx-button"
+          },
+          {
+            "memberId": "jsCode",
+            "componentId": "this/code-viewer"
+          },
+          {
+            "memberId": "resultNoCompButton",
+            "componentId": "com.incowia.basic-html-components@0.1.0-SNAPSHOT/cubx-button"
+          },
+          {
+            "memberId": "traditionalResult",
+            "componentId": "this/html-renderer"
+          },
+          {
+            "memberId": "headNote",
+            "componentId": "com.incowia.basic-html-components@0.1.0-SNAPSHOT/cubx-p"
+          },
+          {
+            "memberId": "setHeadButton",
+            "componentId": "com.incowia.basic-html-components@0.1.0-SNAPSHOT/cubx-button"
+          },
+          {
+            "memberId": "headCode",
+            "componentId": "this/code-viewer"
+          },
+          {
+            "memberId": "componentNote",
+            "componentId": "com.incowia.basic-html-components@0.1.0-SNAPSHOT/cubx-p"
+          },
+          {
+            "memberId": "setComponentButton",
+            "componentId": "com.incowia.basic-html-components@0.1.0-SNAPSHOT/cubx-button"
+          },
+          {
+            "memberId": "componentCode",
+            "componentId": "this/code-viewer"
+          },
+          {
+            "memberId": "resultCompButton",
+            "componentId": "com.incowia.basic-html-components@0.1.0-SNAPSHOT/cubx-button"
+          },
+          {
+            "memberId": "componentsResult",
+            "componentId": "this/html-renderer"
+          }
+        ],
+        "connections": [],
+        "inits": [
+          {
+            "slot": "id",
+            "value": "traditionalResultR",
+            "memberIdRef": "traditionalResult"
+          },
+          {
+            "slot": "text",
+            "value": "To develop a simple Webapp, first you would write the code for all html elements that you need",
+            "memberIdRef": "htmlNote"
+          },
+          {
+            "slot": "text",
+            "value": "Then you would probably write some scripts to control app behavior",
+            "memberIdRef": "jsNote"
+          },
+          {
+            "slot": "id",
+            "value": "htmlCV",
+            "memberIdRef": "htmlCode"
+          },
+          {
+            "slot": "id",
+            "value": "jsCV",
+            "memberIdRef": "jsCode"
+          },
+          {
+            "slot": "id",
+            "value": "resultNoCompB",
+            "memberIdRef": "resultNoCompButton"
+          },
+          {
+            "slot": "onclick",
+            "value": "viewResultWithoutComponents()",
+            "memberIdRef": "resultNoCompButton"
+          },
+          {
+            "slot": "text",
+            "value": "View Result",
+            "memberIdRef": "resultNoCompButton"
+          },
+          {
+            "slot": "id",
+            "value": "setHtmlCodeB",
+            "memberIdRef": "setHtmlButton"
+          },
+          {
+            "slot": "onclick",
+            "value": "setHtmlCode()",
+            "memberIdRef": "setHtmlButton"
+          },
+          {
+            "slot": "text",
+            "value": "View Sample Code",
+            "memberIdRef": "setHtmlButton"
+          },
+          {
+            "slot": "id",
+            "value": "setJsCodeB",
+            "memberIdRef": "setJsButton"
+          },
+          {
+            "slot": "onclick",
+            "value": "setJsCode()",
+            "memberIdRef": "setJsButton"
+          },
+          {
+            "slot": "text",
+            "value": "View Sample Code",
+            "memberIdRef": "setJsButton"
+          },
+          {
+            "slot": "id",
+            "value": "componentsResultR",
+            "memberIdRef": "componentsResult"
+          },
+          {
+            "slot": "text",
+            "value": "Using a component, first you should include the required libraries within the head tag",
+            "memberIdRef": "headNote"
+          },
+          {
+            "slot": "text",
+            "value": "Then you could include some titles and the component tag within the html code",
+            "memberIdRef": "componentNote"
+          },
+          {
+            "slot": "id",
+            "value": "headCV",
+            "memberIdRef": "headCode"
+          },
+          {
+            "slot": "id",
+            "value": "componentCV",
+            "memberIdRef": "componentCode"
+          },
+          {
+            "slot": "id",
+            "value": "resultCompB",
+            "memberIdRef": "resultCompButton"
+          },
+          {
+            "slot": "onclick",
+            "value": "viewResultWithComponents()",
+            "memberIdRef": "resultCompButton"
+          },
+          {
+            "slot": "text",
+            "value": "View Result",
+            "memberIdRef": "resultCompButton"
+          },
+          {
+            "slot": "id",
+            "value": "setHeadCodeB",
+            "memberIdRef": "setHeadButton"
+          },
+          {
+            "slot": "onclick",
+            "value": "setHeadCode()",
+            "memberIdRef": "setHeadButton"
+          },
+          {
+            "slot": "text",
+            "value": "View Sample Code",
+            "memberIdRef": "setHeadButton"
+          },
+          {
+            "slot": "id",
+            "value": "setComponentCodeB",
+            "memberIdRef": "setComponentButton"
+          },
+          {
+            "slot": "onclick",
+            "value": "setComponentCode()",
+            "memberIdRef": "setComponentButton"
+          },
+          {
+            "slot": "text",
+            "value": "View Sample Code",
+            "memberIdRef": "setComponentButton"
+          }
+        ]
+      }
+    ],
+    "utilities": [],
+    "apps": [
+      {
+        "artifactId": "docs",
+        "description": "Structure and dataflow viewer for this webpackage",
+        "runnables": [
+          {
+            "name": "chart-library docs",
+            "path": "/index.html",
+            "description": "Call this app as a simple demo."
+          }
+        ]
+      }
+    ]
+  }
+}

@@ -1,147 +1,125 @@
 <!doctype html>
 <html>
-  <head>
+<head>
     <title>bde-graph demo</title>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, minimum-scale=1.0, initial-scale=1, user-scalable=yes">
-    
+
     <script src="../../webcomponentsjs/webcomponents-lite.js"></script>
 
     <link rel="import" href="../../polymer/polymer.html">
+    <link rel="import" href="../../iron-input/iron-input.html">
+    <link rel="import" href="../../iron-selector/iron-selector.html">
     <link rel="import" href="../bde-graph.html">
 
     <style is="custom-style">
-      body {
-        margin: 0;
-        height: 100vh;
-        font-family: "Source Code Pro", Helvetica, Arial, sans-serif;
-      }
+        body {
+            margin: 0;
+            height: 100vh;
+            font-family: "Source Code Pro", Helvetica, Arial, sans-serif;
+        }
 
-      #debug {
-        position: absolute;
-        top: 20px; right: 20px;
-        background: rgba(230, 238, 240, 0.94);
-        padding: 5px;
-        border-radius: 5px;
-      }
+        #debug {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            background: rgba(230, 238, 240, 0.94);
+            padding: 5px;
+            border-radius: 5px;
+        }
 
         #debug:after {
-          content: " ";
-          position: absolute;
-          z-index: 1;
-          top: -10px; left: -10px; right: -10px; bottom: -10px;
-          border: 5px solid rgba(255, 255, 255, 0.5);
-          border-radius: 10px;
-          pointer-events: none;
+            content: " ";
+            position: absolute;
+            z-index: 1;
+            top: -10px;
+            left: -10px;
+            right: -10px;
+            bottom: -10px;
+            border: 5px solid rgba(255, 255, 255, 0.5);
+            border-radius: 10px;
+            pointer-events: none;
         }
-  
-      #autolayoutBtn {
-        width: 100%;
-        margin-top: .5em;
-      }
 
-      select {
-        width: 100%;
-      }
+        #autolayoutBtn {
+            width: 100%;
+            margin-top: .5em;
+        }
 
-      dt {
-        font-weight: 700;
-      }
+        select {
+            width: 100%;
+        }
 
+        dt {
+            font-weight: 700;
+        }
+
+        .hidden {
+            display: none;
+        }
+
+        .show {
+            display: block;
+        }
+
+        iron-selector > * {
+            padding: 8px;
+        }
+
+        .iron-selected {
+            background-color: royalblue;
+            color: white;
+        }
     </style>
-  </head>
-  <body>
+</head>
+<body>
 
-    <template is="dom-bind" id="app">
-      <bde-graph id="graph"
-        theme="[[theme]]"
-        artifact-id="{{artifactId}}"
-        connections="{{connections}}"
-        inits="{{inits}}"
-        members="{{members}}"
-        slots="{{slots}}"
-        library="{{library}}"></bde-graph>
+<template is="dom-bind" id="app">
+    <bde-graph id="graph"
+               theme="[[theme]]"
+               artifact-id="{{artifactId}}"
+               connections="{{connections}}"
+               inits="{{inits}}"
+               members="{{members}}"
+               slots="{{slots}}"
+               library="{{library}}"></bde-graph>
 
-      <div id="debug">
-        <input is="iron-input" type="text" bind-value="{{webpackageUrl}}">
-        <button on-tap="fetchWebpackage">Load</button><br>
+    <div id="debug">
+        <input is="iron-input" type="text" bind-value="{{webpackageUrl}}"
+               value="https://www.cubbles.world/sandbox/com.incowia.lib.chart-library@0.1.0-SNAPSHOT/manifest.webpackage">
+        <button on-tap="fetchWebpackage">Load</button>
+        <br>
+        <div id="componentsFrame" class="hidden">
+            <iron-selector id="components" attr-for-selected="name" on-iron-select="selectComponent">
+
+            </iron-selector>
+
+        </div>
+
         <button id="autolayoutBtn" on-tap="autolayout">Autolayout</button>
         <dl>
-          <dt>ArtifactId</dt>
-          <dd>[[artifactId]]</dd>
-          <dt>Theme</dt>
-          <dd><select name="theme" id="theme" value="{{theme::change}}">
-            <option value="light" selected>light</option>
-            <option value="dark">dark</option>
-          </select></dd>
-          <dt>Connections</dt>
-          <dd>[[connections.length]]</dd>
-          <dt>Inits</dt>
-          <dd>[[inits.length]]</dd>
-          <dt>Members</dt>
-          <dd>
-            [[members.length]] <br>
-            <button id="addMember" on-tap="addMember">Add Random Member</button>
-          </dd>
-          <dt>Slots</dt>
-          <dd>[[slots.length]]</dd>
+            <dt>ArtifactId</dt>
+            <dd>[[artifactId]]</dd>
+            <dt>Theme</dt>
+            <dd><select name="theme" id="theme" value="{{theme::change}}">
+                <option value="light" selected>light</option>
+                <option value="dark">dark</option>
+            </select></dd>
+            <dt>Connections</dt>
+            <dd>[[connections.length]]</dd>
+            <dt>Inits</dt>
+            <dd>[[inits.length]]</dd>
+            <dt>Members</dt>
+            <dd>
+                [[members.length]] <br>
+                <button id="addMember" on-tap="addMember">Add Random Member</button>
+            </dd>
+            <dt>Slots</dt>
+            <dd>[[slots.length]]</dd>
         </dl>
-      </div>
-    </template>
+    </div>
+</template>
 
-    <script>
-    (function() {
-      "use strict";    
-
-      var app = document.querySelector('#app');
-
-      app.fetchWebpackage = function() {
-        var url = app.webpackageUrl;
-        if (!url.endsWith('/manifest.webpackage')) {
-          url += '/manifest.webpackage';
-        }
-
-        fetch(url).then(res => res.json())
-          .then(webpackage => {
-            console.log(webpackage);
-          });
-      }
-
-      app.autolayout = function() {
-        this.$.graph.triggerAutolayout();
-      }
-
-      app.addMember = function() {
-        var components = Object.keys(this.library);
-        var component = components[parseInt(Math.random() * components.length)];
-        this.push('members', {
-          memberId: component + '_' + Math.random().toString(36).substring(2, 7),
-          componentId: component,
-        });
-      }
-
-      app.addEventListener('dom-change', function() {
-        this.artifactId = 'test-compound';
-        this.theme = 'light';
-
-
-        fetch('debug.json').then(r => r.json())
-          .then(demo => {
-            demo.components.forEach(
-              definition => this.$.graph.registerComponent(definition)
-            );
-            this.$.graph.push('members', ...demo.members);
-            this.$.graph.push('slots', ...demo.slots);
-            this.$.graph.push('connections', ...demo.connections);
-            this.$.graph.push('inits', ...demo.inits);
-
-            // Autolayout
-            // TheGraph library is not immediatly available...
-            requestAnimationFrame(() => this.$.graph.triggerAutolayout());
-
-          });
-      });
-    })();
-    </script>
-  </body>
+<script src="demo.js"></script>
+</body>
 </html>

@@ -1,0 +1,40 @@
+{
+  "name": "chart-library",
+  "groupId": "com.incowia.lib",
+  "version": "0.1.0-SNAPSHOT",
+  "modelVersion": "8.3.0",
+  "docType": "webpackage",
+  "author": {
+    "name": "Philipp Wagner",
+    "email": "philipp.wagner@incowia.com"
+  },
+  "contributors": [
+    {
+      "name": "Edwin Gamboa",
+      "email": "edwin.gamboa@incowia.com"
+    }
+  ],
+  "license": "MIT",
+  "keywords": [],
+  "man": [],
+  "artifacts": {
+
+    "compoundComponents": [
+      {
+        "artifactId": "test-compound",
+        "description": "xxx",
+        "endpoints": [
+          {
+            "endpointId": "main",
+            "resources": [],
+            "dependencies": [
+              "this/base-chart/html-import"
+            ]
+          }
+        ],
+        "members": [],
+        "connections": []
+      }
+    ]
+  }
+}
