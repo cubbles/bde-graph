@@ -15,5 +15,15 @@
     "web-component-tester": "^4.0.0",
     "webcomponentsjs": "webcomponents/webcomponentsjs#^0.7.0",
     "iron-selector": "PolymerElements/iron-selector#^1.5.2"
+  },
+  "license": "MIT",
+  "authors": [
+    "Felix Dürrwald <mplabs@mplabs.de>",
+    "Judit Ross <judit.ross@incowia.com>",
+    "Philipp Waqgner <philipp.wagner.ross@incowia.com>"
+  ],
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/cubbles/bde-graph.git"
   }
 }
