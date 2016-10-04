@@ -29,17 +29,14 @@
         fetch(url).then((res) => res.json())
           .then(function (manifest) {
             manifestCharts = manifest;
-            console.log(JSON.stringify(manifestCharts));
             done();
           });
-      });
-      after(function () {
       });
       var convertedData;
       beforeEach(function (done) {
         // call convertData function
         var promise = new Promise(function (resolve, reject) {
-          var convertedDataPromise = window.cubx.bde.bdeDataConverter.convertArtifact(manifestCharts, 'test-compound', 'https://cubbles.world/sandbox/');
+          var convertedDataPromise = window.cubx.bde.bdeDataConverter.convertArtifact('test-compound', manifestCharts, 'https://cubbles.world/sandbox/');
           convertedDataPromise.should.be.instanceof(Promise);
           convertedDataPromise.then((convertedData) => {
             resolve(convertedData);
@@ -47,7 +44,6 @@
         });
         promise.then(function (data) {
           convertedData = data;
-          console.log(JSON.stringify(convertedData));
           done();
         });
       });
@@ -92,18 +88,15 @@
         fetch(url).then((res) => res.json())
           .then(function (manifest) {
             manifestCharts = manifest;
-            console.log(JSON.stringify(manifestCharts));
             done();
           });
-      });
-      after(function () {
       });
       var convertedData;
       var artifact;
       beforeEach(function (done) {
         // call convertData function
         var promise = new Promise(function (resolve, reject) {
-          var convertedDataPromise = window.cubx.bde.bdeDataConverter.convertArtifact(manifestCharts, 'bar-chart', 'https://cubbles.world/sandbox/');
+          var convertedDataPromise = window.cubx.bde.bdeDataConverter.convertArtifact('bar-chart', manifestCharts, 'https://cubbles.world/sandbox/');
           convertedDataPromise.should.be.instanceof(Promise);
           convertedDataPromise.then((convertedData) => {
             resolve(convertedData);
@@ -144,7 +137,6 @@
         component.should.have.property('inports');
         component.should.have.property('outports');
         component.inports.should.have.length('4');
-        console.log('ouports', JSON.stringify(component.outports));
         component.inports[ 0 ].should.have.property('name', 'dataColumns');
         component.inports[ 0 ].should.have.property('type', 'object');
         component.inports[ 1 ].should.have.property('name', 'xLabels');
@@ -154,7 +146,6 @@
         component.inports[ 3 ].should.have.property('name', 'test');
         component.inports[ 3 ].should.have.property('type', 'object');
         component.outports.should.have.length('3');
-        // [{"name":"testInputOutput","type":"string"},{"name":"testOutput","type":"number"},{"name":"test","type":"object"}]
         component.outports[ 0 ].should.have.property('name', 'testInputOutput');
         component.outports[ 0 ].should.have.property('type', 'string');
         component.outports[ 1 ].should.have.property('name', 'testOutput');
@@ -163,7 +154,6 @@
         component.outports[ 2 ].should.have.property('type', 'object');
       });
       it('should the second element in components should be right structure for elementary components', function () {
-        console.log(JSON.stringify(convertedData));
         var component = convertedData.components[ 1 ];
         component.should.have.property('name', 'base-chart');
         component.should.have.property('icon', 'cog');
@@ -178,6 +168,197 @@
         component.inports[ 2 ].should.have.property('type', 'string');
         component.outports.should.have.length('0');
       });
+    });
+    describe('convert artifact with member reference to other webpackage', function () {
+      var convertedData;
+      var artifact;
+      var webpackageManifest;
+      var basicHtmlComponentWebpackage;
+      var server;
+      before(function (done) {
+        // Get test manifest
+        var url = 'resources/my-webpackage@0.1.0/manifest.webpackage';
+        var promises = [];
+        promises.push(new Promise(function (resolve, reject) {
+          fetch(url).then((res) => res.json())
+            .then(function (manifest) {
+              webpackageManifest = manifest;
+              resolve(webpackageManifest);
+            });
+        }));
+        url = 'resources/com.incowia.basic-html-components@0.1.0-SNAPSHOT/manifest.webpackage';
+        promises.push(new Promise(function (resolve, reject) {
+          fetch(url).then((res) => res.json())
+            .then(function (manifest) {
+              basicHtmlComponentWebpackage = manifest;
+              resolve(basicHtmlComponentWebpackage);
+            });
+        }));
+        Promise.all(promises).then((values) => done());
+      });
+      beforeEach(function (done) {
+        // define server response
+        server = sinon.fakeServer.create();
+        server.respondWith('GET', 'https://cubbles.world/sandbox/com.incowia.basic-html-components@0.1.0-SNAPSHOT/manifest.webpackage', [ 200,
+          { 'Content-Type': 'application/octet-stream' },
+          JSON.stringify(basicHtmlComponentWebpackage) ]);
+        // call convertData function
+        var promise = new Promise(function (resolve, reject) {
+          var convertedDataPromise = window.cubx.bde.bdeDataConverter.convertArtifact('my-compound', webpackageManifest, 'https://cubbles.world/sandbox/');
+          convertedDataPromise.should.be.instanceof(Promise);
+          convertedDataPromise.then((convertedData) => {
+            resolve(convertedData);
+          });
+        });
+        artifact = webpackageManifest.artifacts.compoundComponents.find((artifact) => artifact.artifactId === 'my-compound');
+        promise.then(function (data) {
+          convertedData = data;
+          console.log('convertedData', JSON.stringify(convertedData));
+          done();
+        });
+      });
+
+      afterEach(function () {
+        server = null;
+      });
+      it('converted artifact is an object', function () {
+        convertedData.should.be.an('object');
+      });
+      it('should have connection as in the manifest', function () {
+        convertedData.connections.should.be.eql(artifact.connections);
+      });
+      it('should have inits as in the manifest', function () {
+        convertedData.inits.should.be.eql(artifact.inits);
+      });
+      it('should have slots as in the manifest', function () {
+        convertedData.slots.should.be.eql(artifact.slots);
+      });
+      it('should have members, the attribute componentId contains just artifactId', function () {
+        convertedData.members.should.have.length(1);
+        convertedData.members[ 0 ].should.have.property('memberId', 'input');
+        convertedData.members[ 0 ].should.have.property('componentId', 'cubx-input');
+      });
+      it('should have 2 elemets in components', function () {
+        convertedData.components.should.have.length(2);
+        convertedData.components[ 0 ].name.should.be.equals('my-compound');
+        convertedData.components[ 1 ].name.should.be.equals('cubx-input');
+      });
+      it('should the first element in components should be right structure for compound components', function () {
+        var component = convertedData.components[ 0 ];
+        component.should.have.property('name', 'my-compound');
+        component.should.have.property('icon', 'cogs');
+        component.should.have.property('inports');
+        component.should.have.property('outports');
+        component.inports.should.have.length('1');
+        component.inports[ 0 ].should.have.property('name', 'outdoor-temperature');
+        component.inports[ 0 ].should.have.property('type', 'number');
+        component.outports.should.have.length('1');
+        component.outports[ 0 ].should.have.property('name', 'outdoor-temperature');
+        component.outports[ 0 ].should.have.property('type', 'number');
+      });
+      it('should the second element in components should be right structure for elementary components', function () {
+        var component = convertedData.components[ 1 ];
+        component.should.have.property('name', 'cubx-input');
+        component.should.have.property('icon', 'cog');
+        component.should.have.property('inports');
+        component.should.have.property('outports');
+        component.inports.should.have.length('21');
+        component.inports[ 0 ].should.have.property('name', 'id');
+        component.inports[ 0 ].should.have.property('type', 'string');
+        component.inports[ 1 ].should.have.property('name', 'type');
+        component.inports[ 1 ].should.have.property('type', 'string');
+        component.inports[ 2 ].should.have.property('name', 'name');
+        component.inports[ 2 ].should.have.property('type', 'string');
+        component.inports[ 3 ].should.have.property('name', 'required');
+        component.inports[ 3 ].should.have.property('type', 'boolean');
+        component.inports[ 4 ].should.have.property('name', 'readonly');
+        component.inports[ 4 ].should.have.property('type', 'boolean');
+        component.inports[ 5 ].should.have.property('name', 'disabled');
+        component.inports[ 5 ].should.have.property('type', 'boolean');
+        component.inports[ 6 ].should.have.property('name', 'label');
+        component.inports[ 6 ].should.have.property('type', 'string');
+        component.inports[ 7 ].should.have.property('name', 'value');
+        component.inports[ 7 ].should.have.property('type', 'string');
+        component.inports[ 8 ].should.have.property('name', 'placeholder');
+        component.inports[ 8 ].should.have.property('type', 'string');
+        component.inports[ 9 ].should.have.property('name', 'min');
+        component.inports[ 9 ].should.have.property('type', 'number');
+        component.inports[ 10 ].should.have.property('name', 'max');
+        component.inports[ 10 ].should.have.property('type', 'number');
+        component.inports[ 11 ].should.have.property('name', 'step');
+        component.inports[ 11 ].should.have.property('type', 'number');
+        component.inports[ 12 ].should.have.property('name', 'checked');
+        component.inports[ 12 ].should.have.property('type', 'boolean');
+        component.inports[ 13 ].should.have.property('name', 'accept');
+        component.inports[ 13 ].should.have.property('type', 'string');
+        component.inports[ 14 ].should.have.property('name', 'alt');
+        component.inports[ 14 ].should.have.property('type', 'string');
+        component.inports[ 15 ].should.have.property('name', 'height');
+        component.inports[ 15 ].should.have.property('type', 'number');
+        component.inports[ 16 ].should.have.property('name', 'width');
+        component.inports[ 16 ].should.have.property('type', 'number');
+        component.inports[ 17 ].should.have.property('name', 'src');
+        component.inports[ 17 ].should.have.property('type', 'string');
+        component.inports[ 18 ].should.have.property('name', 'rightText');
+        component.inports[ 18 ].should.have.property('type', 'string');
+        component.inports[ 19 ].should.have.property('name', 'tabindex');
+        component.inports[ 19 ].should.have.property('type', 'number');
+        component.inports[ 20 ].should.have.property('name', 'customValue');
+        component.inports[ 20 ].should.have.property('type', 'object');
+        component.outports.should.have.length('4');
+        component.outports[ 0 ].should.have.property('name', 'value');
+        component.outports[ 0 ].should.have.property('type', 'string');
+        component.outports[ 1 ].should.have.property('name', 'checked');
+        component.outports[ 1 ].should.have.property('type', 'boolean');
+        component.outports[ 2 ].should.have.property('name', 'customValue');
+        component.outports[ 2 ].should.have.property('type', 'object');
+        component.outports[ 3 ].should.have.property('name', 'changeObject');
+        component.outports[ 3 ].should.have.property('type', 'object');
+      });
+
+    });
+  });
+  describe('convert member', function () {
+    var manifestCharts;
+    var convertedData;
+    var member;
+    before(function (done) {
+      // Get test manifest
+      var url = 'resources/com.incowia.lib.chart-library@0.1.0-SNAPSHOT/manifest.webpackage';
+      fetch(url).then((res) => res.json())
+        .then(function (manifest) {
+          manifestCharts = manifest;
+          done();
+        });
+    });
+
+    beforeEach(function (done) {
+      // call convertData function
+      member = {
+        memberId: 'testMember',
+        componentId: 'this/bar-chart'
+      };
+      var promise = new Promise(function (resolve, reject) {
+        var convertedDataPromise = window.cubx.bde.bdeDataConverter.convertMember(member, manifestCharts, 'https://cubbles.world/sandbox/');
+        convertedDataPromise.should.be.instanceof(Promise);
+        convertedDataPromise.then((convertedData) => {
+          resolve(convertedData);
+        });
+      });
+      promise.then(function (data) {
+        convertedData = data;
+        done();
+      });
+    });
+    it('should be an object', function () {
+      convertedData.should.be.an('object');
+    });
+    it('should have a property member with the correct structure', function () {
+      convertedData.should.have.property('member');
+      convertedData.member.should.have.property('memberId', member.memberId);
+      convertedData.member.should.have.property('componentId');
+      convertedData.member.componentId.should.not.equal(member.componentId);
+      member.componentId.should.contains(convertedData.member.componentId);
     });
   });
 })();

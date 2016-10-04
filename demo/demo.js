@@ -7,7 +7,7 @@
     var artifactId = detail.item.innerHTML;
     this.$.graph.rebuildGraph();
     console.log(artifactId);
-    var promise = window.cubx.bde.bdeDataConverter.convertArtifact(app.webpackage, artifactId, app.baseUrl);
+    var promise = window.cubx.bde.bdeDataConverter.convertArtifact(artifactId, app.webpackage, app.baseUrl);
     promise.then((data) => {
       this.$.graph.set('members', data.members);
       this.$.graph.set('slots', data.slots);

@@ -1,0 +1,68 @@
+{
+  "name": "my-package",
+  "groupId": "",
+  "version": "0.1.0",
+  "modelVersion": "8.3.1",
+  "docType": "webpackage",
+  "author": {
+    "name": "Judit Ross",
+    "email": "judit.ross@incowia.com"
+  },
+  "license": "MIT",
+  "keywords": [ ],
+  "man": [ ],
+  "artifacts": {
+    "compoundComponents": [
+      {
+        "artifactId": "my-compound",
+        "description": "This is a cubbles-compound-component.",
+        "runnables": [
+          {
+            "name": "demo",
+            "path": "/demo/index.html",
+            "description": "Demo app..."
+          },
+          {
+            "name": "docs",
+            "path": "/docs/index.html",
+            "description": "Show the interface and dataflow of this component."
+          }
+        ],
+        "endpoints": [
+          {
+            "endpointId": "main",
+            "resources": [
+              "css/my-compound.css"
+            ],
+            "dependencies": [
+              "this/my-elementry",
+              "com.incowia.basic-html-components@0.1.0-SNAPSHOT/cubx-input/main"
+            ]
+          }
+        ],
+        "slots": [
+          {
+            "slotId": "outdoor-temperature",
+            "type": "number",
+            "direction": [
+              "input",
+              "output"
+            ]
+          }
+        ],
+        "members": [
+          {
+            "memberId": "input",
+            "componentId": "com.incowia.basic-html-components@0.1.0-SNAPSHOT/cubx-input"
+          }
+        ],
+        "connections": [
+
+        ],
+        "inits": [
+
+        ]
+      }
+    ]
+  }
+}
