@@ -70,6 +70,15 @@
             background-color: royalblue;
             color: white;
         }
+
+        div.member label {
+            display: block;
+        }
+
+        div.member {
+            display: block;
+        }
+
     </style>
 </head>
 <body>
@@ -85,8 +94,7 @@
                library="{{library}}"></bde-graph>
 
     <div id="debug">
-        <input is="iron-input" type="text" bind-value="{{webpackageUrl}}"
-               value="https://www.cubbles.world/sandbox/com.incowia.lib.chart-library@0.1.0-SNAPSHOT/manifest.webpackage">
+        <input is="iron-input" type="text" bind-value="{{webpackageUrl}}" value="">
         <button on-tap="fetchWebpackage">Load</button>
         <br>
         <div id="componentsFrame" class="hidden">
@@ -97,27 +105,47 @@
         </div>
 
         <button id="autolayoutBtn" on-tap="autolayout">Autolayout</button>
-        <dl>
-            <dt>ArtifactId</dt>
-            <dd>[[artifactId]]</dd>
-            <dt>Theme</dt>
-            <dd><select name="theme" id="theme" value="{{theme::change}}">
-                <option value="light" selected>light</option>
-                <option value="dark">dark</option>
-            </select></dd>
-            <dt>Connections</dt>
-            <dd>[[connections.length]]</dd>
-            <dt>Inits</dt>
-            <dd>[[inits.length]]</dd>
-            <dt>Members</dt>
-            <dd>
-                [[members.length]] <br>
-                <button id="addMember" on-tap="addMember">Add Random Member</button>
+        <div>
+            <dl>
+                <dt>ArtifactId</dt>
+                <dd>[[artifactId]]</dd>
+                <dt>Theme</dt>
+                <dd><select name="theme" id="theme" value="{{theme::change}}">
+                    <option value="light" selected>light</option>
+                    <option value="dark">dark</option>
+                </select></dd>
+                <dt>Connections</dt>
+                <dd>[[connections.length]]</dd>
+                <dt>Inits</dt>
+                <dd>[[inits.length]]</dd>
+                <dt>Members</dt>
+                <dd>
+                    [[members.length]] <br>
+                </dd>
+                <dt>Slots</dt>
+                <dd>[[slots.length]]</dd>
+                <dt>Add Random member from own manifest</dt>
+                <dd>
+                    <button id="addRandomMember" on-tap="addRandomMember">Add Random Member</button>
+                </dd>
+                <dt>Add member</dt>
+                <dd>
+                    <div class="member">
+                        <label for="memberId">memberId</label>
+                        <input is="iron-input" id="memberId" type="text" value="input" class="member">
+                    </div>
+                    <div class="member">
+                        <label for="componentId" class="member">componentId</label>
+                        <input is="iron-input" id="componentId" type="text" value="com.incowia.basic-html-components@0.1.0-SNAPSHOT/cubx-input" class="member"></div>
+                    <div class="member">
+                        <label for="baseUrl" class="member">baseUrl</label>
+                        <input is="iron-input" id="baseUrl" type="text" value="https://cubbles.world/sandbox"
+                               class="member"></div>
+                    <button id="addMember" on-tap="addMember">Add Member</button>
+            </dl>
             </dd>
-            <dt>Slots</dt>
-            <dd>[[slots.length]]</dd>
-        </dl>
-    </div>
+            </dl>
+        </div>
 </template>
 
 <script src="demo.js"></script>

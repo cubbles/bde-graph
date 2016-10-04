@@ -315,7 +315,6 @@
         component.outports[ 3 ].should.have.property('name', 'changeObject');
         component.outports[ 3 ].should.have.property('type', 'object');
       });
-
     });
   });
   describe('convert member', function () {
@@ -359,6 +358,16 @@
       convertedData.member.should.have.property('componentId');
       convertedData.member.componentId.should.not.equal(member.componentId);
       member.componentId.should.contains(convertedData.member.componentId);
+    });
+    it('should have a property component with the correct structure', function () {
+      convertedData.should.have.property('component');
+      convertedData.component.should.have.property('name', 'bar-chart');
+      convertedData.component.should.have.property('icon', 'cogs');
+      convertedData.component.should.have.property('inports');
+      convertedData.component.should.have.property('outports');
+      console.log('convertedData.component.inports', JSON.stringify(convertedData.component.inports));
+      convertedData.component.inports.should.have.length(4);
+      convertedData.component.outports.should.have.length(3);
     });
   });
 })();

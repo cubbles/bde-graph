@@ -6,7 +6,6 @@
   app.selectComponent = function (e, detail) {
     var artifactId = detail.item.innerHTML;
     this.$.graph.rebuildGraph();
-    console.log(artifactId);
     var promise = window.cubx.bde.bdeDataConverter.convertArtifact(artifactId, app.webpackage, app.baseUrl);
     promise.then((data) => {
       this.$.graph.set('members', data.members);
@@ -36,7 +35,6 @@
 
     fetch(url).then((res) => res.json())
       .then((webpackage) => {
-        console.log(webpackage);
         app.webpackage = webpackage;
         app.$.components.innerHTML = '';
 
@@ -58,7 +56,7 @@
     this.$.graph.triggerAutolayout();
   };
 
-  app.addMember = function () {
+  app.addRandomMember = function () {
     var components = Object.keys(this.library);
     var component = components[ parseInt(Math.random() * components.length) ];
     this.push('members', {
@@ -67,10 +65,26 @@
     });
   };
 
+  app.addMember = function () {
+    var memberId = app.$.memberId.value;
+    var componentId = app.$.componentId.value;
+    var baseUrl = app.$.baseUrl.value;
+    if (memberId && componentId && baseUrl) {
+      var member = {
+        memberId: memberId,
+        componentId: componentId
+      };
+    }
+    var promise = window.cubx.bde.bdeDataConverter.convertMember(member, app.webpackage, baseUrl);
+    promise.then((data) => {
+      this.$.graph.registerComponent(data.component);
+      this.$.graph.push('members', data.member);
+    });
+  };
+
   app.addEventListener('dom-change', function () {
     this.artifactId = 'test-compound';
     this.theme = 'light';
-
     fetch('debug.json').then((r) => r.json())
       .then((demo) => {
         demo.components.forEach(
@@ -80,7 +94,9 @@
         this.$.graph.push('slots', ...demo.slots);
         this.$.graph.push('connections', ...demo.connections);
         this.$.graph.push('inits', ...demo.inits);
-
+        fetch('manifest.webpackage').then((response) => response.json()).then((webpackage) => {
+          this.webpackage = webpackage;
+        });
         // Autolayout
         // TheGraph library is not immediatly available...
         requestAnimationFrame(() => this.$.graph.triggerAutolayout());

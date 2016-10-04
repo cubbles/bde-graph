@@ -1,0 +1,570 @@
+{
+  "name": "cubx-webpackage-viewer",
+  "groupId": "com.incowia",
+  "version": "1.2.0",
+  "modelVersion": "8.3.0",
+  "docType": "webpackage",
+  "author": {
+    "name": "Edwin Gamboa",
+    "email": "edwin.gamboa@incowia.com"
+  },
+  "license": "MIT",
+  "keywords": ["webpackage viewer", "component viewer", "docs viewer"],
+  "man": [],
+  "artifacts": {
+    "apps": [
+      {
+        "artifactId": "any-webpackage-viewer",
+        "description": "App to visualize the structure of any webpackage using its manifest url",
+        "runnables": [
+          {
+            "name": "Any Webpackage App.",
+            "path": "/index.html",
+            "description": "Call this app as a simple demo."
+          }
+        ]
+      }
+    ],
+    "elementaryComponents": [
+      {
+        "artifactId": "cubx-structure-viewer",
+        "description": "Component to visualize the structure of a webpackage using the manifest.webpackage file",
+        "runnables": [],
+        "endpoints": [
+          {
+            "endpointId": "main",
+            "description": "This is recommended for you use with webcomponents.",
+            "resources": [
+              "cubx-structure-viewer.html"
+            ],
+            "dependencies": [
+              "cubx.core.rte@1.9.0/cubxpolymer/main",
+              "cubx-json-editor-0.7.25@1.0.2/cubx-json-editor/html-import"
+            ]
+          }
+        ],
+        "slots": [
+          {
+            "slotId": "schemaLoaded",
+            "type": "boolean",
+            "direction": [
+              "input"
+            ],
+            "description": "Boolean indicating whether the schema has loaded",
+            "value": false
+          },
+          {
+            "slotId": "manifestLoaded",
+            "type": "boolean",
+            "description": "Boolean indicating whether the manifest has loaded",
+            "direction": [
+              "input"
+            ],
+            "value": false
+          },
+          {
+            "slotId": "manifest",
+            "type": "object",
+            "description": "Valid manifest of a webpackage",
+            "direction": [
+              "input",
+              "output"
+            ]
+          },
+          {
+            "slotId": "schema",
+            "type": "object",
+            "description": "JSON schema of the manifest",
+            "direction": [
+              "input"
+            ]
+          },
+          {
+            "slotId": "currentComponentArtifactId",
+            "type": "string",
+            "description": "'artifactId' of the component which is to be displayed",
+            "direction": [
+              "output"
+            ]
+          }
+        ]
+      },
+      {
+        "artifactId": "cubx-component-viewer",
+        "description": "Viewer of components interface and dataflow for compound components",
+        "runnables": [
+          {
+            "name": "demo",
+            "path": "/demo/index.html",
+            "description": "Demo app..."
+          }
+        ],
+        "endpoints": [
+          {
+            "endpointId": "main",
+            "description": "This is recommended for you use with webcomponents.",
+            "resources": [
+              "cubx-component-viewer.html",
+              "jsFunctions.js"
+            ],
+            "dependencies": [
+              "cubx.core.rte@1.9.0/cubxpolymer/main",
+              "klayjsd3-0.3.5@1.0.2/klayjs-d3/html-import",
+              "jquery-2.1.4@1.0.0/jquery/html-import",
+              "this/d3-tip/html-import",
+              "this/file-saver/html-import"
+            ]
+          }
+        ],
+        "slots": [
+          {
+            "slotId": "componentArtifactId",
+            "type": "string",
+            "description": "'artifactId' of the current component",
+            "direction": [
+              "input"
+            ]
+          },
+          {
+            "slotId": "component",
+            "type": "object",
+            "description": "Current component (component object from a valid manifest)",
+            "direction": [
+              "output"
+            ]
+          },
+          {
+            "slotId": "manifest",
+            "type": "object",
+            "description": "Webpackage manifest object of the component",
+            "direction": [
+              "input"
+            ]
+          },
+          {
+            "slotId": "viewerWidth",
+            "description": "Width of the component viewer (e.g. 100%, 100px, 100em). By default it is '100%'",
+            "type": "string",
+            "direction": [
+              "input"
+            ],
+            "value": "100%"
+          },
+          {
+            "slotId": "viewerHeight",
+            "type": "string",
+            "description": "Height of the component viewer (e.g. 100%, 100px, 100em).",
+            "direction": [
+              "input"
+            ]
+          },
+          {
+            "slotId": "viewerTitle",
+            "type": "string",
+            "description": "Title for the component viewer. By default it is 'Interface view' for an elementary component and 'Dataflow view' for a compound component",
+            "direction": [
+              "input"
+            ]
+          },
+          {
+            "slotId": "showTitle",
+            "type": "boolean",
+            "description": "Boolean indicating whether the title should be displayed",
+            "direction": [
+              "input"
+            ],
+            "value": false
+          }
+        ]
+      },
+      {
+        "artifactId": "cubx-component-info-viewer",
+        "description": "Viewer of components information (slots)",
+        "runnables": [
+          {
+            "name": "demo",
+            "path": "/demo/index.html",
+            "description": "Demo app..."
+          }
+        ],
+        "endpoints": [
+          {
+            "endpointId": "main",
+            "description": "This is recommended for you use with webcomponents.",
+            "resources": [
+              "cubx-component-info-viewer.html"
+            ],
+            "dependencies": [
+              "cubx.core.rte@1.9.0/cubxpolymer/main",
+              "bootstrap-3.3.5@1.0.3/bootstrap/html-import"
+            ]
+          }
+        ],
+        "slots": [
+          {
+            "slotId": "component",
+            "type": "object",
+            "description": "Component to be used to fill the information tables (component object from a valid manifest)",
+            "direction": [
+              "input"
+            ]
+          },
+          {
+            "slotId": "title",
+            "type": "string",
+            "direction": [
+              "input"
+            ],
+            "description": "Title for this component. By default it is 'Interface details'",
+            "value": "Interface details"
+          }
+        ]
+      }
+    ],
+    "compoundComponents": [
+      {
+        "artifactId": "cubx-webpackage-viewer",
+        "description": "Component to visualize the structure of a webpackage and the dataflow of its compound components",
+        "runnables": [
+          {
+            "name": "demo",
+            "path": "/demo/index.html",
+            "description": "Demo app..."
+          }
+        ],
+        "endpoints": [
+          {
+            "endpointId": "main",
+            "resources": [
+              "css/cubx-webpackage-viewer.css",
+              "template.html",
+              "jsFunctions.js"
+            ],
+            "dependencies": [
+              "this/cubx-component-viewer/main",
+              "this/cubx-structure-viewer/main",
+              "com.incowia.ajax@0.1.0-SNAPSHOT/ajax-request/main"
+            ]
+          }
+        ],
+        "slots": [
+          {
+            "slotId": "schemaUrl",
+            "type": "string",
+            "description": "Url of the JSON schema of the webpackage manifest. By default it is the url of the 'manifestWebpackage-8.3.1.schema.json' in GitHub",
+            "direction": [
+              "input"
+            ]
+          },
+          {
+            "slotId": "manifestUrl",
+            "description": "Url of the webpackage manifest. It can be relative or absolute.",
+            "type": "string",
+            "direction": [
+              "input"
+            ]
+          }
+        ],
+        "members": [
+          {
+            "memberId": "componentViewer",
+            "componentId": "this/cubx-component-viewer"
+          },
+          {
+            "memberId": "structureViewer",
+            "componentId": "this/cubx-structure-viewer"
+          },
+          {
+            "memberId": "manifestRequester",
+            "componentId": "com.incowia.ajax@0.1.0-SNAPSHOT/ajax-request"
+          },
+          {
+            "memberId": "schemaRequester",
+            "componentId": "com.incowia.ajax@0.1.0-SNAPSHOT/ajax-request"
+          }
+        ],
+        "connections": [
+          {
+            "connectionId": "manifestUrlCon",
+            "source": {
+              "slot": "manifestUrl"
+            },
+            "destination": {
+              "memberIdRef": "manifestRequester",
+              "slot": "config"
+            },
+            "hookFunction": "window.com_incowia_cubxWebpackageViewer_cubxWebpackageViewer.buildConfigObject"
+          },
+          {
+            "connectionId": "manifestLoadedCon",
+            "source": {
+              "memberIdRef": "manifestRequester",
+              "slot": "status"
+            },
+            "destination": {
+              "memberIdRef": "structureViewer",
+              "slot": "manifestLoaded"
+            },
+            "hookFunction": "window.com_incowia_cubxWebpackageViewer_cubxWebpackageViewer.isLoaded"
+          },
+          {
+            "connectionId": "resultToManifest",
+            "source": {
+              "memberIdRef": "manifestRequester",
+              "slot": "result"
+            },
+            "destination": {
+              "memberIdRef": "structureViewer",
+              "slot": "manifest"
+            }
+          },
+          {
+            "connectionId": "schemaUrlCon",
+            "source": {
+              "slot": "schemaUrl"
+            },
+            "destination": {
+              "memberIdRef": "schemaRequester",
+              "slot": "config"
+            },
+            "hookFunction": "window.com_incowia_cubxWebpackageViewer_cubxWebpackageViewer.buildConfigObject"
+          },
+          {
+            "connectionId": "schemaLoadedCon",
+            "source": {
+              "memberIdRef": "schemaRequester",
+              "slot": "status"
+            },
+            "destination": {
+              "memberIdRef": "structureViewer",
+              "slot": "schemaLoaded"
+            },
+            "hookFunction": "window.com_incowia_cubxWebpackageViewer_cubxWebpackageViewer.isLoaded"
+          },
+          {
+            "connectionId": "resultToSchema",
+            "source": {
+              "memberIdRef": "schemaRequester",
+              "slot": "result"
+            },
+            "destination": {
+              "memberIdRef": "structureViewer",
+              "slot": "schema"
+            }
+          },
+          {
+            "connectionId": "currentComponentIdCon",
+            "source": {
+              "memberIdRef": "structureViewer",
+              "slot": "currentComponentArtifactId"
+            },
+            "destination": {
+              "memberIdRef": "componentViewer",
+              "slot": "componentArtifactId"
+            },
+            "repeatedValues": true
+          },
+          {
+            "connectionId": "manifestCon",
+            "source": {
+              "memberIdRef": "structureViewer",
+              "slot": "manifest"
+            },
+            "destination": {
+              "memberIdRef": "componentViewer",
+              "slot": "manifest"
+            }
+          }
+        ],
+        "inits": [
+          {
+            "slot": "schemaUrl",
+            "value": "https://raw.githubusercontent.com/cubbles/cubx-webpackage-document-api/master/lib/jsonSchema/manifestWebpackage-8.3.1.schema.json"
+          }
+        ]
+      },
+      {
+        "artifactId": "cubx-component-docs-viewer",
+        "description": "Component to visualize a component and its interface details",
+        "runnables": [
+          {
+            "name": "demo",
+            "path": "/demo/index.html",
+            "description": "Demo app..."
+          }
+        ],
+        "endpoints": [
+          {
+            "endpointId": "main",
+            "resources": [
+              "css/cubx-component-docs-viewer.css",
+              "template.html",
+              "jsFunctions.js"
+            ],
+            "dependencies": [
+              "this/cubx-component-viewer/main",
+              "this/cubx-component-info-viewer/main",
+              "com.incowia.ajax@0.1.0-SNAPSHOT/ajax-request/main"
+            ]
+          }
+        ],
+        "slots": [
+          {
+            "slotId": "componentArtifactId",
+            "type": "string",
+            "description": "'artifactId' of the current component",
+            "direction": [
+              "input"
+            ]
+          },
+          {
+            "slotId": "manifest",
+            "type": "object",
+            "description": "Webpackage manifest of the current component, not necessary if the 'manifestUrl' slot already has the needed value",
+            "direction": [
+              "input"
+            ]
+          },
+          {
+            "slotId": "manifestUrl",
+            "type": "string",
+            "description": "Webpackage manifest url of the current component, not necessary if the 'manifest' slot already has the needed value",
+            "direction": [
+              "input"
+            ]
+          }
+        ],
+        "members": [
+          {
+            "memberId": "componentViewer",
+            "componentId": "this/cubx-component-viewer"
+          },
+          {
+            "memberId": "componentInfoViewer",
+            "componentId": "this/cubx-component-info-viewer"
+          },
+          {
+            "memberId": "manifestRequester",
+            "componentId": "com.incowia.ajax@0.1.0-SNAPSHOT/ajax-request"
+          }
+        ],
+        "connections": [
+          {
+            "connectionId": "manifestCon",
+            "source": {
+              "slot": "manifest"
+            },
+            "destination": {
+              "memberIdRef": "componentViewer",
+              "slot": "manifest"
+            }
+          },
+          {
+            "connectionId": "componentArtifactIdCon",
+            "source": {
+              "slot": "componentArtifactId"
+            },
+            "destination": {
+              "memberIdRef": "componentViewer",
+              "slot": "componentArtifactId"
+            }
+          },
+          {
+            "connectionId": "componentCon",
+            "source": {
+              "memberIdRef": "componentViewer",
+              "slot": "component"
+            },
+            "destination": {
+              "memberIdRef": "componentInfoViewer",
+              "slot": "component"
+            }
+          },
+          {
+            "connectionId": "manifestUrlCon",
+            "source": {
+              "slot": "manifestUrl"
+            },
+            "destination": {
+              "memberIdRef": "manifestRequester",
+              "slot": "config"
+            },
+            "hookFunction": "window.com_incowia_cubxWebpackageViewer_cubxComponentViewer.buildConfigObject"
+          },
+          {
+            "connectionId": "resultToManifest",
+            "source": {
+              "memberIdRef": "manifestRequester",
+              "slot": "result"
+            },
+            "destination": {
+              "memberIdRef": "componentViewer",
+              "slot": "manifest"
+            }
+          }
+        ],
+        "inits": [
+          {
+            "slot": "viewerHeight",
+            "value": "500px",
+            "memberIdRef": "componentViewer"
+          },
+          {
+            "slot": "showTitle",
+            "value": true,
+            "memberIdRef": "componentViewer"
+          }
+        ]
+      }
+    ],
+    "utilities": [
+      {
+        "artifactId": "d3-tip",
+        "description": "Utility to use the d3-tip library v 0.6.7",
+        "endpoints": [
+          {
+            "endpointId": "main",
+            "resources": [
+              "d3-tip.js"
+            ],
+            "dependencies": []
+          },
+          {
+            "endpointId": "html-import",
+            "description": "This is recommended for you use with webcomponents.",
+            "resources": [
+              "d3-tip.html"
+            ],
+            "dependencies": []
+          }
+        ]
+      },
+      {
+        "artifactId": "file-saver",
+        "description": "Utility to use the FileSaver.js library v 1.3.2",
+        "endpoints": [
+          {
+            "endpointId": "main",
+            "resources": [
+              {
+                "prod" : "FileSaver.min.js",
+                "dev" : "FileSaver.js"
+              }
+            ],
+            "dependencies": []
+          },
+          {
+            "endpointId": "html-import",
+            "resources": [
+              {
+                "prod" : "file-saver.min.html",
+                "dev" : "file-saver.html"
+              }
+            ],
+            "dependencies": []
+          }
+        ]
+      }
+    ]
+  }
+}
