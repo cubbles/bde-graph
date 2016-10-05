@@ -199,7 +199,6 @@
     },
 
     observers: [
-      'artifactIdChanged(artifactId)',
       'slotsChanged(slots.*)',
       'membersChanged(members.*)',
       'connectionsChanged(connections.*)',
@@ -638,15 +637,6 @@
       this.debounceLibraryRefresh();
     },
 
-    /**
-     * Assume the artifact has changed, when artifactId has changed
-     * and (re)build the graph.
-     */
-    artifactIdChanged: function (newArtifactId, oldArtifactId) {
-      if (!newArtifactId || (newArtifactId === oldArtifactId)) { return; }
-      this.rebuildGraph();
-    },
-
     rebuildGraph: function () {
       if (!this._graph) { return; }
 
@@ -763,8 +753,6 @@
         }, this);
       } else if (changeRecord.path === 'members' || changeRecord.path === 'members.length') {
         // Members were set
-        console.log('members changerecord ', changeRecord);
-        console.log('members', this.members);
         if (changeRecord.value instanceof Array && changeRecord.value.length > 0) {
           for (let i = 0; i < changeRecord.value.length; i++) {
             this._addMemberToGraph(changeRecord.value[ i ]);
@@ -834,7 +822,6 @@
 
     initsChanged: function (changeRecord) {
       var i, index, init, metadata, path;
-      console.log(changeRecord);
       if (!changeRecord) { return; }
 
       // Inits were added or removed

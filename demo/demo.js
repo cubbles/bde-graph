@@ -6,7 +6,7 @@
   app.selectComponent = function (e, detail) {
     var artifactId = detail.item.innerHTML;
     this.$.graph.rebuildGraph();
-    var promise = window.cubx.bde.bdeDataConverter.convertArtifact(artifactId, app.webpackage, app.baseUrl);
+    var promise = window.cubx.bde.bdeDataConverter.resolveArtifact(artifactId, app.webpackage, app.baseUrl, window.resolutions);
     promise.then((data) => {
       this.$.graph.set('members', data.members);
       this.$.graph.set('slots', data.slots);
@@ -19,6 +19,9 @@
     });
   };
   app.fetchWebpackage = function () {
+    if (!window.resolutions) {
+      window.resolutions = {};
+    }
     this.$.graph.rebuildGraph();
     var url = app.webpackageUrl;
     if (!url.endsWith('/manifest.webpackage')) {
@@ -75,7 +78,7 @@
         componentId: componentId
       };
     }
-    var promise = window.cubx.bde.bdeDataConverter.convertMember(member, app.webpackage, baseUrl);
+    var promise = window.cubx.bde.bdeDataConverter.resolveMember(member, app.webpackage, baseUrl, window.resolutions);
     promise.then((data) => {
       this.$.graph.registerComponent(data.component);
       this.$.graph.push('members', data.member);
@@ -85,6 +88,10 @@
   app.addEventListener('dom-change', function () {
     this.artifactId = 'test-compound';
     this.theme = 'light';
+    if (!window.resolutions){
+      window.resolutions = {};
+    }
+    this.$.graph.rebuildGraph();
     fetch('debug.json').then((r) => r.json())
       .then((demo) => {
         demo.components.forEach(

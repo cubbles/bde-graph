@@ -5,12 +5,20 @@
       it('bde-data-converter should be exists', function () {
         expect(window.cubx.bde.bdeDataConverter).to.be.exists;
       });
-      it('bde-data-converter should have property "convertArtifact"', function () {
+      it('window.cubx.bde.bdeDataConverter should be exists', function () {
         expect(window.cubx.bde.bdeDataConverter).to.be.exists;
-        window.cubx.bde.bdeDataConverter.should.have.property('convertArtifact');
       });
-      it('bde-data-converter should have method "convertArtifact"', function () {
-        window.cubx.bde.bdeDataConverter.convertArtifact.should.be.a('function');
+      it('bde-data-converter should have property "resolveArtifact"', function () {
+        window.cubx.bde.bdeDataConverter.should.have.property('resolveArtifact');
+      });
+      it('bde-data-converter should have property "resolveMember"', function () {
+        window.cubx.bde.bdeDataConverter.should.have.property('resolveMember');
+      });
+      it('bde-data-converter should have method "resolveArtifact"', function () {
+        window.cubx.bde.bdeDataConverter.resolveArtifact.should.be.a('function');
+      });
+      it('bde-data-converter should have method "resolveMember"', function () {
+        window.cubx.bde.bdeDataConverter.resolveMember.should.be.a('function');
       });
       it('bde-data-converter should have a property compoundIcon="cogs"', function () {
         window.cubx.bde.bdeDataConverter.should.have.ownProperty('compoundIcon', 'cogs');
@@ -20,7 +28,7 @@
       });
     });
   });
-  describe('convert webpackage', function () {
+  describe('#resolveArtifact', function () {
     describe('minimal webpackage', function () {
       var manifestCharts;
       before(function (done) {
@@ -36,7 +44,7 @@
       beforeEach(function (done) {
         // call convertData function
         var promise = new Promise(function (resolve, reject) {
-          var convertedDataPromise = window.cubx.bde.bdeDataConverter.convertArtifact('test-compound', manifestCharts, 'https://cubbles.world/sandbox/');
+          var convertedDataPromise = window.cubx.bde.bdeDataConverter.resolveArtifact('test-compound', manifestCharts, 'https://cubbles.world/sandbox/');
           convertedDataPromise.should.be.instanceof(Promise);
           convertedDataPromise.then((convertedData) => {
             resolve(convertedData);
@@ -93,10 +101,13 @@
       });
       var convertedData;
       var artifact;
+      var resolutions;
       beforeEach(function (done) {
+        resolutions = {};
         // call convertData function
+
         var promise = new Promise(function (resolve, reject) {
-          var convertedDataPromise = window.cubx.bde.bdeDataConverter.convertArtifact('bar-chart', manifestCharts, 'https://cubbles.world/sandbox/');
+          var convertedDataPromise = window.cubx.bde.bdeDataConverter.resolveArtifact('bar-chart', manifestCharts, 'https://cubbles.world/sandbox/', resolutions);
           convertedDataPromise.should.be.instanceof(Promise);
           convertedDataPromise.then((convertedData) => {
             resolve(convertedData);
@@ -168,6 +179,15 @@
         component.inports[ 2 ].should.have.property('type', 'string');
         component.outports.should.have.length('0');
       });
+      it('should be all components in resolutions', function () {
+        Object.getOwnPropertyNames(resolutions).should.have.length(2);
+        resolutions['bar-chart'].should.have.property('artifact');
+        resolutions['bar-chart'].artifact.should.be.eql(manifestCharts.artifacts.compoundComponents.find((comp) => comp.artifactId === 'bar-chart'));
+        resolutions['bar-chart'].should.have.property('componentId', 'this/bar-chart');
+        resolutions['base-chart'].should.have.property('artifact');
+        resolutions['base-chart'].artifact.should.be.eql(manifestCharts.artifacts.elementaryComponents.find((comp) => comp.artifactId === 'base-chart'));
+        resolutions['base-chart'].should.have.property('componentId', 'this/base-chart');
+      });
     });
     describe('convert artifact with member reference to other webpackage', function () {
       var convertedData;
@@ -175,6 +195,7 @@
       var webpackageManifest;
       var basicHtmlComponentWebpackage;
       var server;
+      var resolutions;
       before(function (done) {
         // Get test manifest
         var url = 'resources/my-webpackage@0.1.0/manifest.webpackage';
@@ -197,6 +218,7 @@
         Promise.all(promises).then((values) => done());
       });
       beforeEach(function (done) {
+        resolutions = {};
         // define server response
         server = sinon.fakeServer.create();
         server.respondWith('GET', 'https://cubbles.world/sandbox/com.incowia.basic-html-components@0.1.0-SNAPSHOT/manifest.webpackage', [ 200,
@@ -204,7 +226,7 @@
           JSON.stringify(basicHtmlComponentWebpackage) ]);
         // call convertData function
         var promise = new Promise(function (resolve, reject) {
-          var convertedDataPromise = window.cubx.bde.bdeDataConverter.convertArtifact('my-compound', webpackageManifest, 'https://cubbles.world/sandbox/');
+          var convertedDataPromise = window.cubx.bde.bdeDataConverter.resolveArtifact('my-compound', webpackageManifest, 'https://cubbles.world/sandbox/', resolutions);
           convertedDataPromise.should.be.instanceof(Promise);
           convertedDataPromise.then((convertedData) => {
             resolve(convertedData);
@@ -213,7 +235,6 @@
         artifact = webpackageManifest.artifacts.compoundComponents.find((artifact) => artifact.artifactId === 'my-compound');
         promise.then(function (data) {
           convertedData = data;
-          console.log('convertedData', JSON.stringify(convertedData));
           done();
         });
       });
@@ -315,9 +336,18 @@
         component.outports[ 3 ].should.have.property('name', 'changeObject');
         component.outports[ 3 ].should.have.property('type', 'object');
       });
+      it('should be all components in resolutions', function () {
+        Object.getOwnPropertyNames(resolutions).should.have.length(2);
+        resolutions['my-compound'].should.have.property('artifact');
+        resolutions['my-compound'].artifact.should.be.eql(webpackageManifest.artifacts.compoundComponents.find((comp) => comp.artifactId === 'my-compound'));
+        resolutions['my-compound'].should.have.property('componentId', 'this/my-compound');
+        resolutions['cubx-input'].should.have.property('artifact');
+        resolutions['cubx-input'].artifact.should.be.eql(basicHtmlComponentWebpackage.artifacts.elementaryComponents.find((comp) => comp.artifactId === 'cubx-input'));
+        resolutions['cubx-input'].should.have.property('componentId', 'com.incowia.basic-html-components@0.1.0-SNAPSHOT/cubx-input');
+      });
     });
   });
-  describe('convert member', function () {
+  describe('#resolveMember', function () {
     var manifestCharts;
     var convertedData;
     var member;
@@ -338,7 +368,7 @@
         componentId: 'this/bar-chart'
       };
       var promise = new Promise(function (resolve, reject) {
-        var convertedDataPromise = window.cubx.bde.bdeDataConverter.convertMember(member, manifestCharts, 'https://cubbles.world/sandbox/');
+        var convertedDataPromise = window.cubx.bde.bdeDataConverter.resolveMember(member, manifestCharts, 'https://cubbles.world/sandbox/');
         convertedDataPromise.should.be.instanceof(Promise);
         convertedDataPromise.then((convertedData) => {
           resolve(convertedData);
