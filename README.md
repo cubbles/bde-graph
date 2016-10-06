@@ -543,3 +543,7 @@ A class for convert cubbles manifest data for a data structure which can be used
 ## License
 
 [The MIT License](./LICENSE-MIT.txt)
+
+## Issue tracking
+
+Please report issues in the cubbles [JIRA](https://cubbles.atlassian.net) instance. 
