@@ -866,70 +866,6 @@
       this._graphView.setSelectedNodes(selectedNodesHash);
     },
 
-    /* ***********************************************************************/
-    /* ***************************** private methods *************************/
-    /* ***********************************************************************/
-    _addConnectionToGraph: function (conn) {
-      var metadata = {
-        connectionId: conn.connectionId,
-        copyValue: conn.copyValue,
-        repeatedValues: conn.repeatedValues,
-        hookFunction: conn.hookFunction,
-        description: conn.description
-      };
-      this._graph.addEdge(
-        conn.source.memberIdRef, conn.source.slot,
-        conn.destination.memberIdRef, conn.destination.slot,
-        metadata
-      );
-    },
-    _addMemberToGraph: function (member) {
-      var nodesCount = this._graph.nodes.length;
-      var metadata = {
-        displayName: member.displayName || member.memberId,
-        description: member.description,
-        x: member.x || this.grid,
-        y: member.y || ((nodesCount + 1) * this.snap * 2) + (nodesCount * this.grid)
-      };
-      this._graph.addNode(member.memberId, member.componentId, metadata);
-      if (!this.library[ member.componentId ]) {
-        console.warn('Component', member.componentId, 'is not defined for the graph');
-      }
-    },
-    _addSlotToGraph: function (slot) {
-      var metadata = {
-        description: slot.description
-      };
-      if (slot.direction.indexOf('input') !== -1) {
-        this._graph.addInport(slot.slotId, slot.type, metadata);
-      }
-      if (slot.direction.indexOf('output') !== -1) {
-        this._graph.addOutport(slot.slotId, slot.type, metadata);
-      }
-    },
-    _selectedEdgesChanged: function (changeRecord) {
-      var i, conn, index;
-
-      if (!changeRecord || !this._graphView) { return; }
-
-      changeRecord.indexSplices.forEach(function (s) {
-        s.removed.forEach(function (edge) {
-          conn = this.getConnectionForEdge(edge);
-          index = this.selectedConnections.indexOf(edge);
-          this.splice('selectedConnections', index, 1);
-        }, this);
-
-        for (i = 0; i < s.addedCount; i++) {
-          index = s.index + i;
-          conn = s.object[ index ];
-          this.push('selectedConnections', conn);
-        }
-      }, this);
-
-      this._graphView.setSelectedEdges(this._selectedEdges);
-      this.fire('edges', this._selectedEdges);
-    },
-
     panChanged: function (pan) {
       // Send pan back to React
       if (!this._appView) { return; }
@@ -1061,7 +997,47 @@
         }
       });
     },
-
+    /* ***********************************************************************/
+    /* ***************************** private methods *************************/
+    /* ***********************************************************************/
+    _addConnectionToGraph: function (conn) {
+      var metadata = {
+        connectionId: conn.connectionId,
+        copyValue: conn.copyValue,
+        repeatedValues: conn.repeatedValues,
+        hookFunction: conn.hookFunction,
+        description: conn.description
+      };
+      this._graph.addEdge(
+        conn.source.memberIdRef, conn.source.slot,
+        conn.destination.memberIdRef, conn.destination.slot,
+        metadata
+      );
+    },
+    _addMemberToGraph: function (member) {
+      var nodesCount = this._graph.nodes.length;
+      var metadata = {
+        displayName: member.displayName || member.memberId,
+        description: member.description,
+        x: member.x || this.grid,
+        y: member.y || ((nodesCount + 1) * this.snap * 2) + (nodesCount * this.grid)
+      };
+      this._graph.addNode(member.memberId, member.componentId, metadata);
+      if (!this.library[ member.componentId ]) {
+        console.warn('Component', member.componentId, 'is not defined for the graph');
+      }
+    },
+    _addSlotToGraph: function (slot) {
+      var metadata = {
+        description: slot.description
+      };
+      if (slot.direction.indexOf('input') !== -1) {
+        this._graph.addInport(slot.slotId, slot.type, metadata);
+      }
+      if (slot.direction.indexOf('output') !== -1) {
+        this._graph.addOutport(slot.slotId, slot.type, metadata);
+      }
+    },
     _applyAutolayout: function (layoutedKGraph) {
       var nofloNode, klayChild, idSplit, expDirection, expKey, metadata;
 
@@ -1110,6 +1086,29 @@
 
       // Fit the window
       this.triggerFit();
+    },
+
+    _selectedEdgesChanged: function (changeRecord) {
+      var i, conn, index;
+
+      if (!changeRecord || !this._graphView) { return; }
+
+      changeRecord.indexSplices.forEach(function (s) {
+        s.removed.forEach(function (edge) {
+          conn = this.getConnectionForEdge(edge);
+          index = this.selectedConnections.indexOf(edge);
+          this.splice('selectedConnections', index, 1);
+        }, this);
+
+        for (i = 0; i < s.addedCount; i++) {
+          index = s.index + i;
+          conn = s.object[ index ];
+          this.push('selectedConnections', conn);
+        }
+      }, this);
+
+      this._graphView.setSelectedEdges(this._selectedEdges);
+      this.fire('edges', this._selectedEdges);
     }
   });
 })();
