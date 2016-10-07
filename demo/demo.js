@@ -88,7 +88,7 @@
   app.addEventListener('dom-change', function () {
     this.artifactId = 'test-compound';
     this.theme = 'light';
-    if (!window.resolutions){
+    if (!window.resolutions) {
       window.resolutions = {};
     }
     this.$.graph.rebuildGraph();
