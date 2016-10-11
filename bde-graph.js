@@ -828,7 +828,6 @@
             this._addMemberToGraph(changeRecord.value[ i ]);
           }
         }
-        // @todo: (fdu) Do we need to do something here?
       } else {
         // Member was modified
         path = changeRecord.path.replace(/(members\.#\d+)(\.\S+)/, '$1'); // Strip everything after the index
@@ -1110,9 +1109,9 @@
         x: member.x || coordinates.x,
         y: member.y || coordinates.y
       };
-      this._graph.addNode(member.memberId, member.componentId, metadata);
-      if (!this.library[ member.componentId ]) {
-        console.warn('Component', member.componentId, 'is not defined for the graph');
+      this._graph.addNode(member.memberId, member.artifactId, metadata);
+      if (!this.library[ member.artifactId ]) {
+        console.warn('Component', member.artifactId, 'is not defined for the graph');
       }
     },
 

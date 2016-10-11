@@ -64,7 +64,7 @@
     var component = components[ parseInt(Math.random() * components.length) ];
     this.push('members', {
       memberId: component + '_' + Math.random().toString(36).substring(2, 7),
-      componentId: component
+      artifactId: component
     });
   };
 
