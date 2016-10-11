@@ -1,3 +1,4 @@
+// @importedBy bde-app.html
 /* globals klayCubbles,TheGraph,ReactDOM */
 (function () {
   'use strict';
@@ -23,7 +24,12 @@
         value: false,
         notify: true
       },
-
+      /**
+       * width of the graph
+       *
+       * @type {Number}
+       * @property width
+       */
       width: {
         type: Number,
         notify: true,
@@ -31,6 +37,12 @@
         value: 800
       },
 
+      /**
+       * height of the graph
+       *
+       * @type {Number}
+       * @property height
+       */
       height: {
         type: Number,
         notify: true,
@@ -38,6 +50,12 @@
         value: 600
       },
 
+      /**
+       * A distance of grid points,
+       *
+       * @type {Number}
+       * @property grid
+       */
       grid: {
         type: Number,
         value: 72
@@ -48,12 +66,23 @@
         value: 36
       },
 
+      /**
+       * offset for x position of the graph. (left side distance distance  of the graph)
+       *
+       * @type {Number}
+       * @property offsetX
+       */
       offsetX: {
         type: Number,
         notify: true,
         value: null
       },
-
+      /**
+       * offset for y position of the graph. (top distance  of the graph)
+       *
+       * @type {Number}
+       * @property offsetY
+       */
       offsetY: {
         type: Number,
         notify: true,
@@ -111,6 +140,12 @@
         }
       },
 
+      /**
+       * The list of the members components (nodes) in the graph
+       *
+       * @type {Array}
+       * @property members
+       */
       members: {
         type: Array,
         notify: true,
@@ -119,6 +154,12 @@
         }
       },
 
+      /**
+       * The list of connections (edges) between membrs in the graph
+       *
+       * @type {Array}
+       * @property connections
+       */
       connections: {
         type: Array,
         notify: true,
@@ -127,6 +168,11 @@
         }
       },
 
+      /**
+       * The list of initialisation objects inside of the shown compound components.
+       * @type {Array}
+       * @property inits
+       */
       inits: {
         type: Array,
         notify: true,
@@ -135,6 +181,11 @@
         }
       },
 
+      /**
+       * A list of component deifinitions used in the graph. (all prototypes of components for the graph.)
+       *@type {Array}
+       * @property libraray
+       */
       library: {
         type: Object,
         value: function () {
@@ -149,6 +200,12 @@
         }
       },
 
+      /**
+       * The list of selected members.
+       *
+       * @type {Array}
+       * @property selectedMembers
+       */
       selectedMembers: {
         type: Array,
         notify: true,
@@ -157,6 +214,12 @@
         }
       },
 
+      /**
+       * The list of selected connections.
+       *
+       * @type {Array}
+       * @property selectedConnections
+       */
       selectedConnections: {
         type: Array,
         notify: true,
@@ -637,6 +700,9 @@
       this.debounceLibraryRefresh();
     },
 
+    /**
+     * Build or rebuild the graph.
+     */
     rebuildGraph: function () {
       if (!this._graph) { return; }
 
@@ -732,6 +798,10 @@
       }
     },
 
+    /**
+     * Called if the members list changed. (For Example added or removed members.)
+     * @param {Object} changeRecord the polymer changeRecord object
+     */
     membersChanged: function (changeRecord) {
       var i, index, member, path;
 
@@ -770,6 +840,10 @@
       }
     },
 
+    /**
+     * Called if the connections list changed. (Added or removed connections.)
+     * @param {Object} changeRecord the polymer chamgeRecord object
+     */
     connectionsChanged: function (changeRecord) {
       var i, index, conn, metadata, path;
 
@@ -819,7 +893,10 @@
         );
       }
     },
-
+    /**
+     * Called if the inits list changed. (Added or removed connections.)
+     * @param {Object} changeRecord the polymer chamgeRecord object
+     */
     initsChanged: function (changeRecord) {
       var i, index, init, metadata, path;
       if (!changeRecord) { return; }
@@ -855,6 +932,10 @@
       }
     },
 
+    /**
+     * Called, if the list of selectedMembers changed by selction or deselection of members,
+     * @param {Object} changeRecord the polymer chamgeRecord object
+     */
     selectedMembersChanged: function (changeRecord) {
       if (!changeRecord || !this._graphView) { return; }
 
@@ -1014,19 +1095,27 @@
         metadata
       );
     },
+    /**
+     * Add a node for a member to the graph.
+     * @param {Object} member member of the compound
+     * @private
+     */
     _addMemberToGraph: function (member) {
-      var nodesCount = this._graph.nodes.length;
+      var coordinates = this._calculateCoordiantes();
+
       var metadata = {
         displayName: member.displayName || member.memberId,
         description: member.description,
-        x: member.x || this.grid,
-        y: member.y || ((nodesCount + 1) * this.snap * 2) + (nodesCount * this.grid)
+
+        x: member.x || coordinates.x,
+        y: member.y || coordinates.y
       };
       this._graph.addNode(member.memberId, member.componentId, metadata);
       if (!this.library[ member.componentId ]) {
         console.warn('Component', member.componentId, 'is not defined for the graph');
       }
     },
+
     _addSlotToGraph: function (slot) {
       var metadata = {
         description: slot.description
@@ -1087,7 +1176,59 @@
       // Fit the window
       this.triggerFit();
     },
+    /**
+     * Calculate a x and y coordinates of a new member
+     * @returns {{x: number, y: number}}
+     * @private
+     */
+    _calculateCoordiantes: function () {
+      // var minX = this.clientLeft + this.clientWidth;
+      // var minY = this.clientTop + this.clientHeight;
+      // this._graph.nodes.forEach((node) => {
+      //   minX = Math.min(minX, node.metadata.x);
+      //   minY = Math.min(minY, node.metadata.y);
+      // });
+      // Object.keys(this._graph.inports).forEach((inport) => {
+      //   if (this._graph.inports.hasOwnProperty(inport) && inport.metadata && inport.metadata.x && inport.metadata.y) {
+      //     minX = Math.min(minX, inport.metadata.x);
+      //     minY = Math.min(minY, inport.metadata.y);
+      //   }
+      // });
+      // Object.keys(this._graph.outports).forEach((outport) => {
+      //   if (this._graph.outports.hasOwnProperty(outport) && outport.metadata && outport.metadata.x && outport.metadata.y) {
+      //     minX = Math.min(minX, outport.metadata.x);
+      //     minY = Math.min(minY, outport.metadata.y);
+      //   }
+      // });
+      // var x = minX - this.grid;
+      // var y = minY - this.grid;
+      // if (x < 0) {
+      //   x = this._getRandomInt(0, this.grid);
+      // }
+      // if (y < 0) {
+      //   y = this._getRandomInt(0, this.grid);
+      // }
+      var x = this._getRandomInt(0, this.grid);
+      var y = this._getRandomInt(0, this.grid);
+      var coord = {
+        x: x,
+        y: y
+      };
+      return coord;
+    },
 
+    /**
+     * Genereta and get a random integer  between min and max
+     * @param {Number} min lower limit for the random integer
+     * @param {Number }max upper limit for the random integer
+     * @returns {number} the generated random integer
+     * @private
+     */
+    _getRandomInt: function (min, max) {
+      var minInt = Math.ceil(min);
+      var maxInt = Math.floor(max);
+      return Math.floor(Math.random() * (maxInt - minInt)) + minInt;
+    },
     _selectedEdgesChanged: function (changeRecord) {
       var i, conn, index;
 
