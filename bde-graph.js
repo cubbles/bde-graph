@@ -545,7 +545,7 @@
           s4: {
             icon: 'trash-o',
             iconLabel: 'delete',
-            actions: edgeActions.delete
+            action: edgeActions.delete
           }
         },
 
