@@ -92,15 +92,15 @@
       window.resolutions = {};
     }
     this.$.graph.rebuildGraph();
-    fetch('debug.json').then((r) => r.json())
+    fetch('demo.json').then((r) => r.json())
       .then((demo) => {
         demo.components.forEach(
           (definition) => this.$.graph.registerComponent(definition)
         );
-        this.$.graph.push('members', ...demo.members);
-        this.$.graph.push('slots', ...demo.slots);
-        this.$.graph.push('connections', ...demo.connections);
-        this.$.graph.push('inits', ...demo.inits);
+        this.$.graph.set('members', demo.members);
+        this.$.graph.set('slots', demo.slots);
+        this.$.graph.set('connections', demo.connections);
+        this.$.graph.set('inits', demo.inits);
         fetch('manifest.webpackage').then((response) => response.json()).then((webpackage) => {
           this.webpackage = webpackage;
         });

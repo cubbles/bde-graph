@@ -399,7 +399,7 @@
       if (!member) {
         this.push('members', {
           memberId: node.id,
-          component: node.component,
+          artifactId: node.artifactId,
           metadata: node.metadata
         });
       }
@@ -492,7 +492,8 @@
         iconLabel: 'paste',
         action: function (graph, itemKey, item) {
           var pasted = TheGraph.Clipboard.paste(graph);
-          this.set('selectedMembers', pasted.nodes.map(this.getMemberForNode));
+          var members = pasted.nodes.map(this.createMemberForNode.bind(this));
+          this.set('selectedMembers', members);
           this.set('selectedConnections', []);
         }.bind(this)
       };
@@ -513,6 +514,7 @@
         copy: function (graph, itemKey, item) {
           // @todo: (fdu) handle this
           // TheGraph.Clipboard.copy(graph, [itemKey]);
+          TheGraph.Clipboard.copy(graph, [ itemKey ]);
         }.bind(this) // eslint-disable-line no-extra-bind
       };
 
@@ -534,6 +536,7 @@
 
         // Background
         main: {
+
           icon: 'sitemap',
           e4: pasteMenu
         },
@@ -716,6 +719,7 @@
 
       this._graph.on('endTransaction', this.onGraphChanged.bind(this));
       this._graph.on('addEdge', this.onAddEdge.bind(this));
+      this._graph.on('addNode', this.onAddNode.bind(this));
       this._graph.on('removeEdge', this.onRemoveEdge.bind(this));
       this._graph.on('addInport', this.onAddInport.bind(this));
       this._graph.on('removeInport', this.onRemoveInport.bind(this));
@@ -1044,6 +1048,30 @@
         return member.memberId === node.id;
       });
     },
+    getNodeForMember: function (member) {
+      return this._graph.nodes.find(function (node) {
+        return member.memberId === node.id;
+      });
+    },
+    /**
+     * create a member from a node (node in graph)
+     * @param {object} node a node in the graph
+     * @returns {object} a created new member object
+     */
+    createMemberForNode: function (node) {
+      var member = {
+        memberId: node.id,
+        artifactId: node.artifactId,
+        componentId: node.metadata.componentId
+      };
+      if (node.metadata && node.metadata.componentId) {
+        member.componentId = node.metadata.componentId;
+      }
+      if (node.metadata && node.metadata.displayName) {
+        member.displayName = node.metadata.displayName;
+      }
+      return member;
+    },
 
     getSlotForPort: function (publicPort) {
       return this.slots.find(function (slot) {
@@ -1109,17 +1137,19 @@
      */
     _addMemberToGraph: function (member) {
       var coordinates = this._calculateCoordiantes();
+      if (!this.getNodeForMember(member)) {
+        var metadata = {
+          displayName: member.displayName || member.memberId,
+          description: member.description,
+          componentId: member.componentId,
 
-      var metadata = {
-        displayName: member.displayName || member.memberId,
-        description: member.description,
-
-        x: member.x || coordinates.x,
-        y: member.y || coordinates.y
-      };
-      this._graph.addNode(member.memberId, member.artifactId, metadata);
-      if (!this.library[ member.artifactId ]) {
-        console.warn('Component', member.artifactId, 'is not defined for the graph');
+          x: member.x || coordinates.x,
+          y: member.y || coordinates.y
+        };
+        this._graph.addNode(member.memberId, member.artifactId, metadata);
+        if (!this.library[ member.artifactId ]) {
+          console.warn('Component', member.artifactId, 'is not defined for the graph');
+        }
       }
     },
 

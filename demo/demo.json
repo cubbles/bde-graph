@@ -104,11 +104,13 @@
   "members": [
     {
       "memberId": "componentViewer",
-      "componentId": "cubx-component-viewer"
+      "componentId": "this/cubx-component-viewer",
+      "artifactId": "cubx-component-viewer"
     },
     {
       "memberId": "structureViewer",
-      "componentId": "cubx-structure-viewer"
+      "componentId": "this/cubx-structure-viewer",
+      "artifactId": "cubx-structure-viewer"
     }
   ],
   "slots": [
@@ -123,10 +125,16 @@
       "description": "Url of the webpackage manifest. It can be relative or absolute.",
       "type": "string",
       "direction": [ "input" ]
+    },
+    {
+      "slotId": "component",
+      "type": "string",
+      "direction": [ "output" ]
     }
   ],
   "inits": [
     {
+      "memberIdRef": "structureViewer",
       "slot": "schemaUrl",
       "value": "https://raw.githubusercontent.com/cubbles/cubx-webpackage-document-api/master/lib/jsonSchema/manifestWebpackage-8.3.1.schema.json"
     }
@@ -141,6 +149,33 @@
       "destination": {
         "memberIdRef": "componentViewer",
         "slot": "manifest"
+      }
+    }, {
+      "connectionId": "whoNeedsThis",
+      "source": {
+        "slot": "manifestUrl"
+      },
+      "destination": {
+        "memberIdRef": "structureViewer",
+        "slot": "manifest"
+      }
+    }, {
+      "connectionId": "whoNeedsThisAnyway",
+      "source": {
+        "slot": "schemaUrl"
+      },
+      "destination": {
+        "memberIdRef": "structureViewer",
+        "slot": "schema"
+      }
+    }, {
+      "connectionId": "stillUseless",
+      "source": {
+        "memberIdRef": "componentViewer",
+        "slot": "component"
+      },
+      "destination": {
+        "slot": "component"
       }
     }
   ]
