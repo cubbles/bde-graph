@@ -201,6 +201,33 @@
       },
 
       /**
+       * The list of selected connections.
+       *
+       * @type {Array}
+       * @property selectedConnections
+       */
+      selectedConnections: {
+        type: Array,
+        notify: true,
+        value: function () {
+          return [];
+        }
+      },
+
+      /**
+       * the list of selected input slots
+       * @type {Array}
+       * @property selectedInputSlots
+       */
+      selectedInputSlots: {
+        type: Array,
+        notify: true,
+        value: function () {
+          return [];
+        }
+      },
+
+      /**
        * The list of selected members.
        *
        * @type {Array}
@@ -215,12 +242,11 @@
       },
 
       /**
-       * The list of selected connections.
-       *
+       * the list of selected output slots
        * @type {Array}
-       * @property selectedConnections
+       * @property selectedOutputSlots
        */
-      selectedConnections: {
+      selectedOutputSlots: {
         type: Array,
         notify: true,
         value: function () {
@@ -272,6 +298,8 @@
       '_panChanged(pan)',
       '_selectedEdgesChanged(_selectedEdges.splices)',
       '_selectedMembersChanged(selectedMembers.*)',
+      '_selectedOutputSlotChanged(selectedOutputSlots.*)',
+      '_selectedInputSlotChanged(selectedInputSlots.*)',
       '_slotsChanged(slots.*)',
       '_themeChanged(theme)'
     ],
@@ -365,6 +393,8 @@
         forceSelection: this.forceSelection,
         onEdgeSelection: this.onEdgeSelection.bind(this),
         onNodeSelection: this.onNodeSelection.bind(this),
+        onInportSelection: this.onInportSelection.bind(this),
+        onOutportSelection: this.onOutportSelection.bind(this),
         onPanScale: this.onPanScale.bind(this),
         offsetY: this.offsetY,
         offsetX: this.offsetX
@@ -600,6 +630,33 @@
       }
     },
 
+    onInportSelection: function (itemKey, metadata, toggle) {
+      console.log(' onInportSelection itemKey', itemKey, 'metadata', metadata, 'toggle', toggle);
+
+      var slot;
+      var index;
+      var isSelected;
+
+      if (itemKey === undefined) {
+        this.splice('selectedInputSlots', 0, this.selectedInputSlots.length);
+        return;
+      }
+
+      slot = this._getSlotForPort(itemKey);
+      index = this.slots.indexOf(slot);
+      if (toggle) {
+        isSelected = (index !== -1);
+        if (isSelected) {
+          this.splice('selectedInputSlots', this.selectedInputSlots.indexOf(slot), 1);
+        } else {
+          this.push('selectedInputSlots', slot);
+        }
+      } else {
+        this.splice('selectedInputSlots', 0, this.selectedInputSlots.length);
+        this.push('selectedInputSlots', slot);
+      }
+    },
+
     onNodeSelection: function (itemKey, item, toggle) {
       var member, index, isSelected;
 
@@ -627,7 +684,31 @@
       this.set('pan', { x: x, y: y });
       this.set('scale', scale);
     },
+    onOutportSelection: function (itemKey, metadata, toggle) {
+      console.log('onOutportSelection temKey', itemKey, 'metadata', metadata, 'toggle', toggle);
+      var slot;
+      var index;
+      var isSelected;
 
+      if (itemKey === undefined) {
+        this.splice('selectedOutputSlots', 0, this.selectedOutputSlots.length);
+        return;
+      }
+
+      slot = this._getSlotForPort(itemKey);
+      index = this.slots.indexOf(slot);
+      if (toggle) {
+        isSelected = (index !== -1);
+        if (isSelected) {
+          this.splice('selectedOutputSlots', this.selectedOutputSlots.indexOf(slot), 1);
+        } else {
+          this.push('selectedOutputSlots', slot);
+        }
+      } else {
+        this.splice('selectedOutputSlots', 0, this.selectedOutputSlots.length);
+        this.push('selectedOutputSlots', slot);
+      }
+    },
     /* ***********************************************************************/
     /* ***************************** private methods *************************/
     /* ***********************************************************************/
@@ -1254,6 +1335,24 @@
       var selectedNodesHash = {};
       this.selectedMembers.forEach(function (member) {
         selectedNodesHash[ member.memberId ] = true;
+      });
+
+      this._graphView.setSelectedNodes(selectedNodesHash);
+    },
+    _selectedInputSlotChanged: function (changeRecord) {
+      if (!changeRecord || !this._graphView) { return; }
+      var selectedNodesHash = {};
+      this.selectedInputSlots.forEach(function (port) {
+        selectedNodesHash[ port.slotId ] = true;
+      });
+
+      this._graphView.setSelectedNodes(selectedNodesHash);
+    },
+    _selectedOutputSlotChanged: function (changeRecord) {
+      if (!changeRecord || !this._graphView) { return; }
+      var selectedNodesHash = {};
+      this.selectedOutputSlots.forEach(function (port) {
+        selectedNodesHash[ port.slotId ] = true;
       });
 
       this._graphView.setSelectedNodes(selectedNodesHash);
