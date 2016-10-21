@@ -1090,9 +1090,7 @@
           n4: {
             iconLabel: 'edit',
             icon: 'pencil-square-o',
-            action: function (graph, itemKey, item) {
-              alert('edit');
-            }
+            action: this.editActions.graphInport
           },
           s4: {
             icon: 'trash-o',
@@ -1109,9 +1107,7 @@
           n4: {
             iconLabel: 'edit',
             icon: 'pencil-square-o',
-            action: function (graph, itemKey, item) {
-              alert('edit');
-            }
+            action: this.editActions.graphOutport
           },
           s4: {
             icon: 'trash-o',
