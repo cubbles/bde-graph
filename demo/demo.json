@@ -104,12 +104,10 @@
   "members": [
     {
       "memberId": "componentViewer",
-      "componentId": "this/cubx-component-viewer",
       "artifactId": "cubx-component-viewer"
     },
     {
       "memberId": "structureViewer",
-      "componentId": "this/cubx-structure-viewer",
       "artifactId": "cubx-structure-viewer"
     }
   ],

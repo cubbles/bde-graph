@@ -6,7 +6,7 @@
   app.selectComponent = function (e, detail) {
     var artifactId = detail.item.innerHTML;
     this.$.graph.rebuildGraph();
-    var promise = window.cubx.bde.bdeDataConverter.resolveArtifact(artifactId, app.webpackage, app.baseUrl, window.resolutions);
+    this.artifactId = artifactId;
     promise.then((data) => {
       this.$.graph.set('members', data.members);
       this.$.graph.set('slots', data.slots);
@@ -17,6 +17,7 @@
       );
       requestAnimationFrame(() => this.$.graph.triggerAutolayout());
     });
+    var promise = window.cubx.bde.bdeDataConverter.resolveArtifact(artifactId, app.webpackage, app.baseUrl, window.resolutions);
   };
   app.fetchWebpackage = function () {
     if (!window.resolutions) {
@@ -70,15 +71,16 @@
 
   app.addMember = function () {
     var memberId = app.$.memberId.value;
-    var componentId = app.$.componentId.value;
+    var artifactId = app.$.artifactId.value;
     var baseUrl = app.$.baseUrl.value;
-    if (memberId && componentId && baseUrl) {
+    var webpackageId = app.$.webpackageId.value;
+    if (memberId && artifactId && baseUrl) {
       var member = {
         memberId: memberId,
-        componentId: componentId
+        artifactId: artifactId
       };
     }
-    var promise = window.cubx.bde.bdeDataConverter.resolveMember(member, app.webpackage, baseUrl, window.resolutions);
+    var promise = window.cubx.bde.bdeDataConverter.resolveMember(member, webpackageId, app.webpackage, baseUrl, window.resolutions);
     promise.then((data) => {
       this.$.graph.registerComponent(data.component);
       this.$.graph.push('members', data.member);

@@ -2,7 +2,7 @@
   "name": "chart-library",
   "groupId": "com.incowia.lib",
   "version": "0.1.0-SNAPSHOT",
-  "modelVersion": "8.3.0",
+  "modelVersion": "9.1.0",
   "docType": "webpackage",
   "author": {
     "name": "Philipp Wagner",
@@ -15,8 +15,8 @@
     }
   ],
   "license": "MIT",
-  "keywords": [],
-  "man": [],
+  "keywords": [ ],
+  "man": [ ],
   "artifacts": {
     "elementaryComponents": [
       {
@@ -29,21 +29,34 @@
             "description": "base-chart demo"
           }
         ],
-        "endpoints": [
+
+        "description": "This is recommended for you use with webcomponents.",
+        "resources": [
+          "base-chart.html"
+        ],
+        "dependencies": [
           {
-            "endpointId": "html-import",
-            "description": "This is recommended for you use with webcomponents.",
-            "resources": [
-              "base-chart.html"
-            ],
-            "dependencies": [
-              "cubx.core.rte@1.8.0/cubxpolymer/main",
-              "c3-0.4.11-rc4@1.0.0/c3/main",
-              "lodash-3.10.1@1.0.1/lodash/html-import",
-              "q-1.4.1@1.0.0/q/html-import"
-            ]
+            "webpackageId": "cubx.core.rte@1.8.0",
+            "artifactId": "cubxpolymer",
+            "endpointId": "main"
+          },
+          {
+            "webpackageId": "c3-0.4.11-rc4@1.0.0",
+            "artifactId": "c3",
+            "endpointId": "main"
+          },
+          {
+            "webpackageId": "lodash-3.10.1@1.0.1",
+            "artifactId": "lodash",
+            "endpointId": "html-import"
+          },
+          {
+            "webpackageId": "q-1.4.1@1.0.0",
+            "artifactId": "q",
+            "endpointId": "html-import"
           }
         ],
+
         "slots": [
           {
             "slotId": "dataColumns",
@@ -78,20 +91,20 @@
             "description": "Demo app..."
           }
         ],
-        "endpoints": [
+
+        "resources": [
+          "code-viewer.html",
+          "lib/prettify.js",
+          "lib/prettify.css"
+        ],
+        "dependencies": [
           {
-            "endpointId": "main",
-            "description": "This is recommended for you use with webcomponents.",
-            "resources": [
-              "code-viewer.html",
-              "lib/prettify.js",
-              "lib/prettify.css"
-            ],
-            "dependencies": [
-              "cubx.core.rte@1.8.0/cubxpolymer/main"
-            ]
+            "webpackageId": "cubx.core.rte@1.8.0",
+            "artifactId": "cubxpolymer",
+            "endpointId": "main"
           }
         ],
+
         "slots": [
           {
             "slotId": "id",
@@ -120,18 +133,18 @@
             "description": "Demo app..."
           }
         ],
-        "endpoints": [
+
+        "resources": [
+          "html-renderer.html"
+        ],
+        "dependencies": [
           {
-            "endpointId": "main",
-            "description": "This is recommended for you use with webcomponents.",
-            "resources": [
-              "html-renderer.html"
-            ],
-            "dependencies": [
-              "cubx.core.rte@1.8.0/cubxpolymer/main"
-            ]
+            "webpackageId": "cubx.core.rte@1.8.0",
+            "artifactId": "cubxpolymer",
+            "endpointId": "main"
           }
         ],
+
         "slots": [
           {
             "slotId": "id",
@@ -166,15 +179,14 @@
             "description": "Dataflow diagram of this component"
           }
         ],
-        "endpoints": [
+
+        "resources": [ ],
+        "dependencies": [
           {
-            "endpointId": "main",
-            "resources": [],
-            "dependencies": [
-              "this/base-chart/html-import"
-            ]
+            "artifactId": "base-chart"
           }
         ],
+
         "slots": [
           {
             "slotId": "dataColumns",
@@ -191,14 +203,19 @@
             ]
           },
           {
-           "slotId": "testInputOutput",
-           "type": "string",
-           "direction": ["input","output"]
+            "slotId": "testInputOutput",
+            "type": "string",
+            "direction": [
+              "input",
+              "output"
+            ]
           },
           {
             "slotId": "testOutput",
             "type": "number",
-            "direction": ["output"]
+            "direction": [
+              "output"
+            ]
           },
           {
             "slotId": "test",
@@ -208,7 +225,7 @@
         "members": [
           {
             "memberId": "chart1",
-            "componentId": "this/base-chart"
+            "artifactId": "base-chart"
           }
         ],
         "connections": [
@@ -251,15 +268,14 @@
             "description": "Line chart demo"
           }
         ],
-        "endpoints": [
+
+        "resources": [ ],
+        "dependencies": [
           {
-            "endpointId": "main",
-            "resources": [],
-            "dependencies": [
-              "this/base-chart/html-import"
-            ]
+            "artifactId": "base-chart"
           }
         ],
+
         "slots": [
           {
             "slotId": "dataColumns",
@@ -279,7 +295,7 @@
         "members": [
           {
             "memberId": "chart1",
-            "componentId": "this/base-chart"
+            "artifactId": "base-chart"
           }
         ],
         "connections": [
@@ -322,13 +338,11 @@
             "description": "Spline chart demo"
           }
         ],
-        "endpoints": [
+
+        "resources": [ ],
+        "dependencies": [
           {
-            "endpointId": "main",
-            "resources": [],
-            "dependencies": [
-              "this/base-chart/html-import"
-            ]
+            "artifactId": "base-chart"
           }
         ],
         "slots": [
@@ -350,7 +364,7 @@
         "members": [
           {
             "memberId": "chart1",
-            "componentId": "this/base-chart"
+            "artifactId": "base-chart"
           }
         ],
         "connections": [
@@ -393,15 +407,14 @@
             "description": "Pie chart demo"
           }
         ],
-        "endpoints": [
+
+        "resources": [ ],
+        "dependencies": [
           {
-            "endpointId": "main",
-            "resources": [],
-            "dependencies": [
-              "this/base-chart/html-import"
-            ]
+            "artifactId": "base-chart"
           }
         ],
+
         "slots": [
           {
             "slotId": "dataColumns",
@@ -414,7 +427,7 @@
         "members": [
           {
             "memberId": "chart1",
-            "componentId": "this/base-chart"
+            "artifactId": "base-chart"
           }
         ],
         "connections": [
@@ -447,15 +460,14 @@
             "description": "Step chart demo"
           }
         ],
-        "endpoints": [
+
+        "resources": [ ],
+        "dependencies": [
           {
-            "endpointId": "main",
-            "resources": [],
-            "dependencies": [
-              "this/base-chart/html-import"
-            ]
+            "artifactId": "base-chart"
           }
         ],
+
         "slots": [
           {
             "slotId": "dataColumns",
@@ -475,7 +487,7 @@
         "members": [
           {
             "memberId": "chart1",
-            "componentId": "this/base-chart"
+            "artifactId": "base-chart"
           }
         ],
         "connections": [
@@ -518,42 +530,53 @@
             "description": "Demo app..."
           }
         ],
-        "endpoints": [
+
+        "resources": [
+          "css/demo-base-chart.css",
+          "connectionHook.js"
+        ],
+        "dependencies": [
           {
-            "endpointId": "main",
-            "resources": [
-              "css/demo-base-chart.css",
-              "connectionHook.js"
-            ],
-            "dependencies": [
-              "com.incowia.basic-html-components@0.1.0-SNAPSHOT/cubx-select/main",
-              "com.incowia.basic-html-components@0.1.0-SNAPSHOT/cubx-textarea/main",
-              "com.incowia.basic-html-components@0.1.0-SNAPSHOT/cubx-p/main",
-              "this/base-chart/html-import"
-            ]
+            "webpackageId": "com.incowia.basic-html-components@0.1.0-SNAPSHOT",
+            "artifactId": "cubx-select",
+            "endpointId": "main"
+          },
+          {
+            "webpackageId": "com.incowia.basic-html-components@0.1.0-SNAPSHOT",
+            "artifactId": "cubx-textarea",
+            "endpointId": "main"
+          },
+          {
+            "webpackageId": "com.incowia.basic-html-components@0.1.0-SNAPSHOT",
+            "artifactId": "cubx-p",
+            "endpointId": "main"
+          },
+          {
+            "artifactId": "base-chart"
           }
         ],
-        "slots": [],
+
+        "slots": [ ],
         "members": [
           {
             "memberId": "pNote",
-            "componentId": "com.incowia.basic-html-components@0.1.0-SNAPSHOT/cubx-p"
+            "artifactId": "cubx-p"
           },
           {
             "memberId": "typeSelect",
-            "componentId": "com.incowia.basic-html-components@0.1.0-SNAPSHOT/cubx-select"
+            "artifactId": "cubx-select"
           },
           {
             "memberId": "dataColumnsText",
-            "componentId": "com.incowia.basic-html-components@0.1.0-SNAPSHOT/cubx-textarea"
+            "artifactId": "cubx-textarea"
           },
           {
             "memberId": "xLabelsText",
-            "componentId": "com.incowia.basic-html-components@0.1.0-SNAPSHOT/cubx-textarea"
+            "artifactId": "cubx-textarea"
           },
           {
             "memberId": "chart1",
-            "componentId": "this/base-chart"
+            "artifactId": "base-chart"
           }
         ],
         "connections": [
@@ -709,37 +732,43 @@
             "description": "Demo app..."
           }
         ],
-        "endpoints": [
-          {
-            "endpointId": "main",
+
             "resources": [
               "css/demo-line-chart.css",
               "connectionHook.js"
             ],
             "dependencies": [
-              "com.incowia.basic-html-components@0.1.0-SNAPSHOT/cubx-textarea/main",
-              "com.incowia.basic-html-components@0.1.0-SNAPSHOT/cubx-p/main",
-              "this/line-chart/main"
-            ]
-          }
-        ],
-        "slots": [],
+              {
+                "webpackageId": "com.incowia.basic-html-components@0.1.0-SNAPSHOT",
+                "artifactId": "cubx-textarea",
+                "endpointId": "main"
+              },
+              {
+                "webpackageId": "com.incowia.basic-html-components@0.1.0-SNAPSHOT",
+                "artifactId": "cubx-p",
+                "endpointId": "main"
+              },
+              {
+                "artifactId": "line-chart"
+              }
+            ],
+        "slots": [ ],
         "members": [
           {
             "memberId": "pNote",
-            "componentId": "com.incowia.basic-html-components@0.1.0-SNAPSHOT/cubx-p"
+            "artifactId": "cubx-p"
           },
           {
             "memberId": "dataColumnsText",
-            "componentId": "com.incowia.basic-html-components@0.1.0-SNAPSHOT/cubx-textarea"
+            "artifactId": "cubx-textarea"
           },
           {
             "memberId": "xLabelsText",
-            "componentId": "com.incowia.basic-html-components@0.1.0-SNAPSHOT/cubx-textarea"
+            "artifactId": "cubx-textarea"
           },
           {
             "memberId": "chart1",
-            "componentId": "this/base-chart"
+            "artifactId": "base-chart"
           }
         ],
         "connections": [
@@ -836,90 +865,101 @@
             "description": "Demo app..."
           }
         ],
-        "endpoints": [
-          {
-            "endpointId": "main",
+
             "resources": [
               "css/demo-traditional-vs-component.css",
               "demoScripts.js"
             ],
             "dependencies": [
-              "this/base-chart/html-import",
-              "this/code-viewer/main",
-              "this/html-renderer/main",
-              "com.incowia.basic-html-components@0.1.0-SNAPSHOT/cubx-p/main",
-              "com.incowia.basic-html-components@0.1.0-SNAPSHOT/cubx-button/main"
-            ]
-          }
-        ],
-        "slots": [],
+              {
+                "artifactId": "base-chart"
+              },
+              {
+                "artifactId": "code-viewer"
+              },
+              {
+                "artifactId": "html-renderer"
+              },
+              {
+                "webpackageId": "com.incowia.basic-html-components@0.1.0-SNAPSHOT",
+                "artifactId": "cubx-p",
+                "endpointId": "main"
+              },
+              {
+                "webpackageId": "com.incowia.basic-html-components@0.1.0-SNAPSHOT",
+                "artifactId": "cubx-button",
+                "endpointId": "main"
+              }
+            ],
+
+        "slots": [ ],
         "members": [
           {
             "memberId": "htmlNote",
-            "componentId": "com.incowia.basic-html-components@0.1.0-SNAPSHOT/cubx-p"
+            "artifactId": "cubx-p"
           },
           {
             "memberId": "setHtmlButton",
-            "componentId": "com.incowia.basic-html-components@0.1.0-SNAPSHOT/cubx-button"
+            "artifactId": "cubx-button"
           },
           {
             "memberId": "htmlCode",
-            "componentId": "this/code-viewer"
+            "artifactId": "code-viewer"
           },
           {
             "memberId": "jsNote",
-            "componentId": "com.incowia.basic-html-components@0.1.0-SNAPSHOT/cubx-p"
+            "artifactId": "cubx-p"
           },
           {
             "memberId": "setJsButton",
-            "componentId": "com.incowia.basic-html-components@0.1.0-SNAPSHOT/cubx-button"
+            "artifactId": "cubx-button"
           },
           {
             "memberId": "jsCode",
-            "componentId": "this/code-viewer"
+            "artifactId": "code-viewer"
           },
           {
             "memberId": "resultNoCompButton",
-            "componentId": "com.incowia.basic-html-components@0.1.0-SNAPSHOT/cubx-button"
+            "artifactId": "cubx-button"
           },
           {
             "memberId": "traditionalResult",
-            "componentId": "this/html-renderer"
+            "artifactId": "html-renderer"
           },
           {
             "memberId": "headNote",
-            "componentId": "com.incowia.basic-html-components@0.1.0-SNAPSHOT/cubx-p"
+            "artifactId": "cubx-p"
           },
           {
             "memberId": "setHeadButton",
-            "componentId": "com.incowia.basic-html-components@0.1.0-SNAPSHOT/cubx-button"
+            "artifactId": "cubx-button"
           },
           {
             "memberId": "headCode",
-            "componentId": "this/code-viewer"
+            "artifactId": "code-viewer"
           },
           {
             "memberId": "componentNote",
-            "componentId": "com.incowia.basic-html-components@0.1.0-SNAPSHOT/cubx-p"
+            "artifactId": "cubx-p"
           },
           {
             "memberId": "setComponentButton",
-            "componentId": "com.incowia.basic-html-components@0.1.0-SNAPSHOT/cubx-button"
+            "artifactId": "cubx-button"
           },
           {
             "memberId": "componentCode",
-            "componentId": "this/code-viewer"
+            "artifactId": "code-viewer"
           },
           {
             "memberId": "resultCompButton",
-            "componentId": "com.incowia.basic-html-components@0.1.0-SNAPSHOT/cubx-button"
+            "artifactId": "cubx-button"
           },
           {
             "memberId": "componentsResult",
-            "componentId": "this/html-renderer"
+            "artifactId": "html-renderer"
           }
         ],
-        "connections": [],
+        "connections": [ ],
         "inits": [
           {
             "slot": "id",
@@ -1064,7 +1104,7 @@
         ]
       }
     ],
-    "utilities": [],
+    "utilities": [ ],
     "apps": [
       {
         "artifactId": "docs",

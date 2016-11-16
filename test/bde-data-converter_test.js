@@ -1,5 +1,6 @@
 (function () {
   'use strict';
+
   describe('bde-data-converter', function () {
     describe('basics', function () {
       it('bde-data-converter should be exists', function () {
@@ -96,6 +97,7 @@
         fetch(url).then((res) => res.json())
           .then(function (manifest) {
             manifestCharts = manifest;
+            console.log('!!!!! manifestCharts', manifestCharts);
             done();
           });
       });
@@ -135,7 +137,6 @@
         convertedData.members.should.have.length(1);
         convertedData.members[ 0 ].should.have.property('memberId', 'chart1');
         convertedData.members[ 0 ].should.have.property('artifactId', 'base-chart');
-        convertedData.members[ 0 ].should.have.property('componentId', 'this/base-chart');
       });
       it('should have 2 elemets in components', function () {
         convertedData.components.should.have.length(2);
@@ -184,10 +185,10 @@
         Object.getOwnPropertyNames(resolutions).should.have.length(2);
         resolutions[ 'bar-chart' ].should.have.property('artifact');
         resolutions[ 'bar-chart' ].artifact.should.be.eql(manifestCharts.artifacts.compoundComponents.find((comp) => comp.artifactId === 'bar-chart'));
-        resolutions[ 'bar-chart' ].should.have.property('componentId', 'this/bar-chart');
+        resolutions[ 'bar-chart' ].should.have.property('artifactId', 'bar-chart');
         resolutions[ 'base-chart' ].should.have.property('artifact');
         resolutions[ 'base-chart' ].artifact.should.be.eql(manifestCharts.artifacts.elementaryComponents.find((comp) => comp.artifactId === 'base-chart'));
-        resolutions[ 'base-chart' ].should.have.property('componentId', 'this/base-chart');
+        resolutions[ 'base-chart' ].should.have.property('artifactId', 'base-chart');
       });
     });
     describe('convert artifact with member reference to other webpackage', function () {
@@ -255,11 +256,10 @@
       it('should have slots as in the manifest', function () {
         convertedData.slots.should.be.eql(artifact.slots);
       });
-      it('should have members, the attribute componentId contains just artifactId', function () {
+      it('should have members', function () {
         convertedData.members.should.have.length(1);
         convertedData.members[ 0 ].should.have.property('memberId', 'input');
         convertedData.members[ 0 ].should.have.property('artifactId', 'cubx-input');
-        convertedData.members[ 0 ].should.have.property('componentId', 'com.incowia.basic-html-components@0.1.0-SNAPSHOT/cubx-input');
       });
       it('should have 2 elemets in components', function () {
         convertedData.components.should.have.length(2);
@@ -342,17 +342,20 @@
         Object.getOwnPropertyNames(resolutions).should.have.length(2);
         resolutions[ 'my-compound' ].should.have.property('artifact');
         resolutions[ 'my-compound' ].artifact.should.be.eql(webpackageManifest.artifacts.compoundComponents.find((comp) => comp.artifactId === 'my-compound'));
-        resolutions[ 'my-compound' ].should.have.property('componentId', 'this/my-compound');
+        resolutions[ 'my-compound' ].should.have.property('artifactId', 'my-compound');
         resolutions[ 'cubx-input' ].should.have.property('artifact');
         resolutions[ 'cubx-input' ].artifact.should.be.eql(basicHtmlComponentWebpackage.artifacts.elementaryComponents.find((comp) => comp.artifactId === 'cubx-input'));
-        resolutions[ 'cubx-input' ].should.have.property('componentId', 'com.incowia.basic-html-components@0.1.0-SNAPSHOT/cubx-input');
+        resolutions[ 'cubx-input' ].should.have.property('artifactId', 'cubx-input');
       });
     });
   });
+
   describe('#resolveMember', function () {
     var manifestCharts;
     var convertedData;
     var member;
+    var resolutions;
+    var server;
     before(function (done) {
       // Get test manifest
       var url = 'resources/com.incowia.lib.chart-library@0.1.0-SNAPSHOT/manifest.webpackage';
@@ -364,13 +367,19 @@
     });
 
     beforeEach(function (done) {
-      // call convertData function
+      resolutions = {};
       member = {
         memberId: 'testMember',
-        componentId: 'this/bar-chart'
+        artifactId: 'bar-chart'
       };
+      var webpackageId = manifestCharts.groupId + '.' + manifestCharts.name + '@' + manifestCharts.version;
+      // define server response
+      server = sinon.fakeServer.create();
+      server.respondWith('GET', 'https://cubbles.world/sandbox/' + webpackageId + '/manifest.webpackage', [ 200,
+        { 'Content-Type': 'application/octet-stream' },
+        JSON.stringify(manifestCharts) ]);
       var promise = new Promise(function (resolve, reject) {
-        var convertedDataPromise = window.cubx.bde.bdeDataConverter.resolveMember(member, manifestCharts, 'https://cubbles.world/sandbox/');
+        var convertedDataPromise = window.cubx.bde.bdeDataConverter.resolveMember(member, webpackageId, manifestCharts, 'https://cubbles.world/sandbox/', resolutions);
         convertedDataPromise.should.be.instanceof(Promise);
         convertedDataPromise.then((convertedData) => {
           resolve(convertedData);
@@ -387,9 +396,8 @@
     it('should have a property member with the correct structure', function () {
       convertedData.should.have.property('member');
       convertedData.member.should.have.property('memberId', member.memberId);
-      convertedData.member.should.have.property('componentId');
-      convertedData.member.componentId.should.equal(member.componentId);
-      convertedData.member.should.have.property('artifactId', member.componentId.split('/')[1]);
+      convertedData.member.should.have.property('artifactId');
+      convertedData.member.artifactId.should.equal(member.artifactId);
     });
     it('should have a property component with the correct structure', function () {
       convertedData.should.have.property('component');
@@ -402,34 +410,5 @@
       convertedData.component.outports.should.have.length(3);
     });
   });
-  describe('#_resolveMember', function () {
-    it('converted member should have properties memberId and componentId', function () {
-      let webpackageId = 'this';
-      let artifactId = 'my-component';
-      let member = {
-        memberId: 'aMember',
-        componentId: webpackageId + '/' + artifactId
-      };
-      var convertedMember = window.cubx.bde.bdeDataConverter._convertMember(member);
 
-      convertedMember.should.have.property('memberId', member.memberId);
-      convertedMember.should.have.property('artifactId', artifactId);
-      convertedMember.should.have.property('componentId', webpackageId + '/' + artifactId);
-      convertedMember.should.not.have.property('displayName');
-    });
-    it('converted member should have properties memberId and componentId an displayName', function () {
-      let webpackageId = 'this';
-      let artifactId = 'my-component';
-      let member = {
-        memberId: 'aMember',
-        componentId: webpackageId + '/' + artifactId,
-        displayName: 'first-member'
-      };
-      var convertedMember = window.cubx.bde.bdeDataConverter._convertMember(member);
-      convertedMember.should.have.property('memberId', member.memberId);
-      convertedMember.should.have.property('artifactId', artifactId);
-      convertedMember.should.have.property('componentId', webpackageId + '/' + artifactId);
-      convertedMember.should.have.property('displayName', member.displayName);
-    });
-  });
 })();

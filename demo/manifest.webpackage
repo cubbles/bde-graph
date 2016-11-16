@@ -2,7 +2,7 @@
   "name": "cubx-webpackage-viewer",
   "groupId": "com.incowia",
   "version": "1.2.0",
-  "modelVersion": "8.3.0",
+  "modelVersion": "9.1.0",
   "docType": "webpackage",
   "author": {
     "name": "Edwin Gamboa",
@@ -30,19 +30,21 @@
         "artifactId": "cubx-structure-viewer",
         "description": "Component to visualize the structure of a webpackage using the manifest.webpackage file",
         "runnables": [],
-        "endpoints": [
-          {
-            "endpointId": "main",
-            "description": "This is recommended for you use with webcomponents.",
             "resources": [
               "cubx-structure-viewer.html"
             ],
             "dependencies": [
-              "cubx.core.rte@1.9.0/cubxpolymer/main",
-              "cubx-json-editor-0.7.25@1.0.2/cubx-json-editor/html-import"
-            ]
-          }
-        ],
+              {
+                "webpackageId": "cubx.core.rte@1.9.0",
+                "artifactId": "cubxpolymer",
+                "endpointId": "main"
+              },
+              {
+                "webpackageId": "cubx-json-editor-0.7.25@1.0.2",
+                "artifactId": "cubx-json-editor",
+                "endpointId": "html-import"
+              }
+            ],
         "slots": [
           {
             "slotId": "schemaLoaded",
@@ -99,23 +101,33 @@
             "description": "Demo app..."
           }
         ],
-        "endpoints": [
-          {
-            "endpointId": "main",
-            "description": "This is recommended for you use with webcomponents.",
             "resources": [
               "cubx-component-viewer.html",
               "jsFunctions.js"
             ],
             "dependencies": [
-              "cubx.core.rte@1.9.0/cubxpolymer/main",
-              "klayjsd3-0.3.5@1.0.2/klayjs-d3/html-import",
-              "jquery-2.1.4@1.0.0/jquery/html-import",
-              "this/d3-tip/html-import",
-              "this/file-saver/html-import"
-            ]
-          }
-        ],
+              {
+                "webpackageId": "cubx.core.rte@1.9.0",
+                "artifactId": "cubxpolymer",
+                "endpointId": "main"
+              },
+              {
+                "webpackageId": "klayjsd3-0.3.5@1.0.2",
+                "artifactId": "klayjs-d3",
+                "endpointId": "html-import"
+              },
+              {
+                "webpackageId": "jquery-2.1.4@1.0.0",
+                "artifactId": "jquery",
+                "endpointId": "html-import"
+              },
+              {
+                "artifactId": "d3-tip"
+              },
+              {
+                "artifactId": "file-saver"
+              }
+            ],
         "slots": [
           {
             "slotId": "componentArtifactId",
@@ -187,17 +199,19 @@
             "description": "Demo app..."
           }
         ],
-        "endpoints": [
+        "resources": [
+          "cubx-component-info-viewer.html"
+        ],
+        "dependencies": [
           {
-            "endpointId": "main",
-            "description": "This is recommended for you use with webcomponents.",
-            "resources": [
-              "cubx-component-info-viewer.html"
-            ],
-            "dependencies": [
-              "cubx.core.rte@1.9.0/cubxpolymer/main",
-              "bootstrap-3.3.5@1.0.3/bootstrap/html-import"
-            ]
+            "webpackageId": "cubx.core.rte@1.9.0",
+            "artifactId": "cubxpolymer",
+            "endpointId": "main"
+          },
+          {
+            "webpackageId": "bootstrap-3.3.5@1.0.3",
+            "artifactId": "bootstrap",
+            "endpointId": "html-import"
           }
         ],
         "slots": [
@@ -223,6 +237,14 @@
     ],
     "compoundComponents": [
       {
+        "artifactId": "test-compound",
+
+        "resources": [],
+        "dependencies": [
+
+        ]
+      },
+      {
         "artifactId": "cubx-webpackage-viewer",
         "description": "Component to visualize the structure of a webpackage and the dataflow of its compound components",
         "runnables": [
@@ -232,19 +254,22 @@
             "description": "Demo app..."
           }
         ],
-        "endpoints": [
+        "resources": [
+          "css/cubx-webpackage-viewer.css",
+          "template.html",
+          "jsFunctions.js"
+        ],
+        "dependencies": [
           {
-            "endpointId": "main",
-            "resources": [
-              "css/cubx-webpackage-viewer.css",
-              "template.html",
-              "jsFunctions.js"
-            ],
-            "dependencies": [
-              "this/cubx-component-viewer/main",
-              "this/cubx-structure-viewer/main",
-              "com.incowia.ajax@0.1.0-SNAPSHOT/ajax-request/main"
-            ]
+            "artifactId": "cubx-component-viewer"
+          },
+          {
+            "artifactId": "cubx-structure-viewer"
+          },
+          {
+            "webpackageId": "com.incowia.ajax@0.1.0-SNAPSHOT",
+            "artifactId": "ajax-request",
+            "endpointId": "main"
           }
         ],
         "slots": [
@@ -393,21 +418,26 @@
             "description": "Demo app..."
           }
         ],
-        "endpoints": [
+
+        "resources": [
+          "css/cubx-component-docs-viewer.css",
+          "template.html",
+          "jsFunctions.js"
+        ],
+        "dependencies": [
           {
-            "endpointId": "main",
-            "resources": [
-              "css/cubx-component-docs-viewer.css",
-              "template.html",
-              "jsFunctions.js"
-            ],
-            "dependencies": [
-              "this/cubx-component-viewer/main",
-              "this/cubx-component-info-viewer/main",
-              "com.incowia.ajax@0.1.0-SNAPSHOT/ajax-request/main"
-            ]
+            "artifactId": "cubx-component-viewer"
+          },
+          {
+            "artifactId": "cubx-component-info-viewer"
+          },
+          {
+            "webpackageId": "com.incowia.ajax@0.1.0-SNAPSHOT",
+            "artifactId": "ajax-request",
+            "endpointId": "main"
           }
         ],
+
         "slots": [
           {
             "slotId": "componentArtifactId",

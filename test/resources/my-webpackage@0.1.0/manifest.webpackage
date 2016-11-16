@@ -2,7 +2,7 @@
   "name": "my-package",
   "groupId": "",
   "version": "0.1.0",
-  "modelVersion": "8.3.1",
+  "modelVersion": "9.1.0",
   "docType": "webpackage",
   "author": {
     "name": "Judit Ross",
@@ -28,16 +28,18 @@
             "description": "Show the interface and dataflow of this component."
           }
         ],
-        "endpoints": [
+
+        "resources": [
+          "css/my-compound.css"
+        ],
+        "dependencies": [
           {
-            "endpointId": "main",
-            "resources": [
-              "css/my-compound.css"
-            ],
-            "dependencies": [
-              "this/my-elementry",
-              "com.incowia.basic-html-components@0.1.0-SNAPSHOT/cubx-input/main"
-            ]
+            "artifactId": "my-elementary"
+          },
+          {
+            "artifactId": "cubx-input",
+            "webpackageId": "com.incowia.basic-html-components@0.1.0-SNAPSHOT",
+            "endpointId": "main"
           }
         ],
         "slots": [
@@ -53,7 +55,7 @@
         "members": [
           {
             "memberId": "input",
-            "componentId": "com.incowia.basic-html-components@0.1.0-SNAPSHOT/cubx-input"
+            "artifactId": "cubx-input"
           }
         ],
         "connections": [
