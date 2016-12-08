@@ -7,13 +7,16 @@
         {
           "name": "schemaLoaded",
           "type": "boolean"
-        }, {
+        },
+        {
           "name": "manifestLoaded",
           "type": "boolean"
-        }, {
+        },
+        {
           "name": "manifest",
           "type": "object"
-        }, {
+        },
+        {
           "name": "schema",
           "type": "object"
         }
@@ -78,7 +81,7 @@
           "type": "string"
         }
       ],
-      "outports": []
+      "outports": [ ]
     },
     {
       "name": "ajax-request",
@@ -116,18 +119,31 @@
       "slotId": "schemaUrl",
       "type": "string",
       "description": "Url of the JSON schema of the webpackage manifest. By default it is the url of the 'manifestWebpackage-8.3.1.schema.json' in GitHub",
-      "direction": [ "input" ]
+      "direction": [
+        "input"
+      ]
     },
     {
       "slotId": "manifestUrl",
       "description": "Url of the webpackage manifest. It can be relative or absolute.",
       "type": "string",
-      "direction": [ "input" ]
+      "direction": [
+        "input"
+      ]
     },
     {
       "slotId": "component",
       "type": "string",
-      "direction": [ "output" ]
+      "direction": [
+        "output"
+      ]
+    },
+    {
+      "slotId": "test",
+      "direction": [
+        "input",
+        "output"
+      ]
     }
   ],
   "inits": [
@@ -148,7 +164,8 @@
         "memberIdRef": "componentViewer",
         "slot": "manifest"
       }
-    }, {
+    },
+    {
       "connectionId": "whoNeedsThis",
       "source": {
         "slot": "manifestUrl"
@@ -157,7 +174,8 @@
         "memberIdRef": "structureViewer",
         "slot": "manifest"
       }
-    }, {
+    },
+    {
       "connectionId": "whoNeedsThisAnyway",
       "source": {
         "slot": "schemaUrl"
@@ -166,7 +184,8 @@
         "memberIdRef": "structureViewer",
         "slot": "schema"
       }
-    }, {
+    },
+    {
       "connectionId": "stillUseless",
       "source": {
         "memberIdRef": "componentViewer",
@@ -174,6 +193,26 @@
       },
       "destination": {
         "slot": "component"
+      }
+    },
+    {
+      "connectionId": "testOutput",
+      "source": {
+        "memberIdRef": "componentViewer",
+        "slot": "component"
+      },
+      "destination": {
+        "slot": "test"
+      }
+    },
+    {
+      "connectionId": "testInput",
+      "source": {
+        "slot": "test"
+      },
+      "destination": {
+        "memberIdRef": "structureViewer",
+        "slot": "schema"
       }
     }
   ]
