@@ -288,6 +288,13 @@
             "direction": [
               "input"
             ]
+          },
+          {
+            "slotId": "test",
+            "direction": [
+              "input",
+              "output"
+            ]
           }
         ],
         "members": [
@@ -398,6 +405,26 @@
             "destination": {
               "memberIdRef": "componentViewer",
               "slot": "manifest"
+            }
+          },
+          {
+            "connectionId": "testOutput",
+            "source": {
+              "memberIdRef": "componentViewer",
+              "slot": "component"
+            },
+            "destination": {
+              "slot": "test"
+            }
+          },
+          {
+            "connectionId": "testInput",
+            "source": {
+              "slot": "test"
+            },
+            "destination": {
+              "memberIdRef": "structureViewer",
+              "slot": "schema"
             }
           }
         ],
