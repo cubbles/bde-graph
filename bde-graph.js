@@ -647,7 +647,7 @@
         return slot.slotId === publicPort && slot.markedForDelete;
       });
       if (slotForDelete) {
-        this.splice('slots', this.slots.indexOf(slotForDelete), 1);
+        this.slots.splice(this.slots.indexOf(slotForDelete), 1);
       }
     },
 
