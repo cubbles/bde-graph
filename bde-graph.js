@@ -606,7 +606,7 @@
           // this.push('slots', slot);
         }
       } else {
-        var id = publicPort.indexOf('SLOT_') === 0 ? publicPort: 'SLOT_' + publicPort;
+        var id = publicPort.indexOf('__SLOT__') === 0 ? publicPort : '__SLOT__' + publicPort;
         var slotId = port.metadata && port.metadata.slotId ? port.metadata.slotId : publicPort;
         this.push('slots', {
           id: id,
@@ -644,7 +644,7 @@
           slot.direction.push('output');
         }
       } else {
-        var id = publicPort.indexOf('SLOT_') === 0 ? publicPort : 'SLOT_' + publicPort;
+        var id = publicPort.indexOf('__SLOT__') === 0 ? publicPort : '__SLOT__' + publicPort;
         var slotId = port.metadata && port.metadata.slotId ? port.metadata.slotId : publicPort;
         this.push('slots', {
           id: id,
@@ -846,10 +846,10 @@
         description: conn.description
       };
       if (!conn.source.memberIdRef) {
-        conn.source.slot = conn.source.slot.indexOf('SLOT_') === 0 ? conn.source.slot : 'SLOT_' + conn.source.slot;
+        conn.source.slot = conn.source.slot.indexOf('__SLOT__') === 0 ? conn.source.slot : '__SLOT__' + conn.source.slot;
       }
       if (!conn.destination.memberIdRef) {
-        conn.destination.slot = conn.destination.slot.indexOf('SLOT_') === 0 ? conn.destination.slot : 'SLOT_' + conn.destination.slot;
+        conn.destination.slot = conn.destination.slot.indexOf('__SLOT__') === 0 ? conn.destination.slot : '__SLOT__' + conn.destination.slot;
       }
       this._graph.addEdge(
         conn.source.memberIdRef, conn.source.slot,
@@ -1056,7 +1056,7 @@
       };
 
       var exportOutportAction = function (graph, itemKey, item) {
-        var pub = 'SLOT_' + item.port;
+        var pub = '__SLOT__' + item.port;
 
         var count = 0;
         // Make sure public is unique
@@ -1076,7 +1076,7 @@
       }.bind(this);
 
       var exportInportAction = function (graph, itemKey, item) {
-        var pub = 'SLOT_' + item.port;
+        var pub = '__SLOT__' + item.port;
 
         if (pub === 'start') {
           pub = 'start1';
@@ -1617,7 +1617,7 @@
           for (i = 0; i < s.addedCount; i++) {
             index = s.index + i;
             slot = s.object[ index ];
-            slot.id = 'SLOT_' + slot.slotId;
+            slot.id = '__SLOT__' + slot.slotId;
             this._addSlotToGraph(slot);
           }
         }, this);
@@ -1627,7 +1627,7 @@
           for (let i = 0; i < changeRecord.value.length; i++) {
             let slot = changeRecord.value[ i ];
             if (!slot.id) {
-              slot.id = 'SLOT_' + slot.slotId;
+              slot.id = '__SLOT__' + slot.slotId;
             }
             this._addSlotToGraph(slot);
           }
