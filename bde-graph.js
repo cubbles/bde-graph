@@ -1243,9 +1243,9 @@
       // console.log('_getConnectionForEdge edge', edge);
       return this.connections.find(function (conn) {
         return conn.source.memberIdRef === edge.from.node &&
-          conn.source.slot === edge.from.port &&
+          (conn.source.slot === edge.from.port || conn.source.slot === edge.from.port.replace('__SLOT__', '')) &&
           conn.destination.memberIdRef === edge.to.node &&
-          conn.destination.slot === edge.to.port;
+          (conn.destination.slot === edge.to.port || conn.destination.slot === edge.from.port.replace('__SLOT__', ''));
       });
     },
 
