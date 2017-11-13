@@ -1616,7 +1616,8 @@
           // Slot was added
           for (i = 0; i < s.addedCount; i++) {
             index = s.index + i;
-            slot = s.object[ index ];
+            let changedSlot = s.object[ index ];
+            slot = this.slots.find(slot => changedSlot.slotId === slot.slotId);
             slot.id = '__SLOT__' + slot.slotId;
             this._addSlotToGraph(slot);
           }
@@ -1625,7 +1626,8 @@
         // Slots were set
         if (changeRecord.value instanceof Array && changeRecord.value.length > 0) {
           for (let i = 0; i < changeRecord.value.length; i++) {
-            let slot = changeRecord.value[ i ];
+            let changedSlot = changeRecord.value[ i ];
+            slot = this.slots.find(slot => changedSlot.slotId === slot.slotId);
             if (!slot.id) {
               slot.id = '__SLOT__' + slot.slotId;
             }
