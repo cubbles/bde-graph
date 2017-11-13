@@ -689,10 +689,10 @@
 
       this.splice('slots', idx, 1);
 
-      if (slot.direction.length > 1) {
-        slot.direction = [ 'output' ];
-        this.push('slots', slot);
-      }
+      // if (slot.direction.length > 1) {
+      //   slot.direction = [ 'output' ];
+      //   this.push('slots', slot);
+      // }
 
       // remove inits
       var init = this.inits.find((init) => init.slot === slot.slotId && slot.memberIdRef === undefined);
@@ -716,10 +716,10 @@
 
       this.splice('slots', idx, 1);
 
-      if (slot.direction.length > 1) {
-        slot.direction = [ 'input' ];
-        this.push('slots', slot);
-      }
+      // if (slot.direction.length > 1) {
+      //   slot.direction = [ 'input' ];
+      //   this.push('slots', slot);
+      // }
     },
 
     onRenameNode: function (oldId, newId) {
