@@ -1670,6 +1670,7 @@
           let _slot = JSON.parse(JSON.stringify(slot));
           _slots.push(_slot);
         });
+        this.set('_slots', []);
         this.set('_slots', _slots);
       }
     },
