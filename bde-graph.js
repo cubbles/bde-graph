@@ -1065,6 +1065,7 @@
         }
         var priNode = graph.getNode(item.process);
         var metadata = {
+          slotId: item.port,
           x: priNode.metadata.x + 144,
           y: priNode.metadata.y + this._getRandomInt(0, this.grid)
         };
