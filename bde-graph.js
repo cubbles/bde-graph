@@ -1156,6 +1156,7 @@
         },
 
         nodeInport: {
+          label: 'xxx',
           // n4: {
           //   iconLabel: 'edit',
           //   icon: 'pencil-square-o',
