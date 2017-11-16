@@ -381,6 +381,13 @@
     /* **************** Public Methods *******************/
     /* ***************************************************/
     /**
+     * get the coordinates object.
+     */
+    getCoordinates: function () {
+      return this._graph.getCoordinates().snapshot;
+    },
+
+    /**
      * This is called by the graph, when a context menu is shown.
      */
     getMenuDef: function (options) {
