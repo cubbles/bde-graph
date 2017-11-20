@@ -577,8 +577,8 @@
     onAddEdge: function (edge) {
       var connection = this._getConnectionForEdge(edge);
       if (!connection) {
-        let fromSlot = edge.from.port.indexOf('__SLOT__') === 0 ? edge.from.port.replace('__SLOT__','') : edge.from.port;
-        let toSlot = edge.to.port.indexOf('__SLOT__') === 0 ? edge.to.port.replace('__SLOT__','') : edge.to.port;
+        let fromSlot = edge.from.port.indexOf('__SLOT__') === 0 ? edge.from.port.replace('__SLOT__', '') : edge.from.port;
+        let toSlot = edge.to.port.indexOf('__SLOT__') === 0 ? edge.to.port.replace('__SLOT__', '') : edge.to.port;
         var newConnection = {
           connectionId: edge.metadata.connectionId,
 
