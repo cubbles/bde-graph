@@ -430,7 +430,9 @@
     coordinatesChanged: function () {
       var coordinates = this._graph.getCoordinates();
       if (this.onCoordinatesChanged && typeof this.onCoordinatesChanged === 'function') {
-        this.onCoordinatesChanged(coordinates.snapshot, coordinates.change);
+        if (Object.keys(coordinates.change).length) {
+          this.onCoordinatesChanged(coordinates.snapshot, coordinates.change);
+        }
       }
     },
 
